@@ -33,3 +33,29 @@
     background: var(--accent-color);
     color: #fff;
 }
+
+.order-form {
+    /* text-align: center; */
+    margin-left: 5em;
+    margin-right: 5em;
+}
+
+.order-form * {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.product-table {
+    margin-left: auto;
+    margin-right: auto;
+    /* margin-right: -1em; */
+    /* overflow-y: scroll; */
+    max-height: 30%;
+    width: 30%;
+    border: 2px solid black
+}
+
+.product-table thead {
+    background: var(--accent-color);
+    color: #fff;
+}
