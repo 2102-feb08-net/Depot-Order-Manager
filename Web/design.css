@@ -1,0 +1,35 @@
+:root {
+    --accent-color: #6699ff
+}
+
+.accent-color {
+    background-color: var(--accent-color);
+}
+
+.page-title {
+    text-align: center;
+    margin: 0.5em;
+}
+
+.customer-table {
+    margin-left: auto;
+    margin-right: auto;
+    /* margin-right: -1em; */
+    /* overflow-y: scroll; */
+    max-height: 30%;
+    width: 50%;
+    border: 2px solid black
+}
+
+.add-customer {
+    text-align: center;
+}
+
+.add-customer label {
+    padding: 0.5em;
+}
+
+.customer-table thead {
+    background: var(--accent-color);
+    color: #fff;
+}
