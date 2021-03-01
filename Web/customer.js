@@ -1,3 +1,5 @@
+'use strict';
+
 let customerForm = document.getElementById('customerForm');
 customerForm.onsubmit = () => {
 
