@@ -20,6 +20,11 @@ customerForm.onsubmit = () => {
 
 async function loadCustomers() {
     const response = await fetch("/api/customers/getall");
+
+    if (!response.ok) {
+        throw new Error(`Unable to download customers from server: (${response.status}) ${response.statusText}`);
+    }
+
     const customers = await response.json();
 
     for (const customer of customers) {
@@ -36,13 +41,6 @@ function addCustomerRow(id, firstName, lastName) {
     idCell.innerHTML = id;
     firstNameCell.innerHTML = firstName;
     lastNameCell.innerHTML = lastName;
-}
-
-class Customer {
-    constructor(firstName, lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
 }
 
 loadCustomers();

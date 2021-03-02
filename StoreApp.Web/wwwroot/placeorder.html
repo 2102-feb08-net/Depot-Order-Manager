@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -19,36 +19,36 @@
                 <form class="order-form">
                     <div class="form-group">
                         <label for="customer">Customer:</label>
-                        <select name="customer" class="form-select">
+                        <select id="customerSelect" name="customer" class="form-select">
                             <option value="A">Bryson Ewell</option>
                             <option value="B">John Doe</option>
                             <option value="C">Mary Sue</option>
                         </select>
                     </div>
-                    <br/>
+                    <br />
                     <div class="form-group">
                         <label for="location">Location:</label>
-                        <select name="location" class="form-select">
+                        <select id="locationSelect" name="location" class="form-select">
                             <option value="HQ">HQ</option>
                             <option value="Warehouse_East1">Warehouse_East1</option>
                             <option value="Warehouse_West1">Warehouse_West1</option>
                         </select>
                     </div>
-                    <br/>
+                    <br />
                     <fieldset>
                         <legend>Products:</legend>
                         <div class="form-group">
                             <label for="productType">Product:</label>
-                            <select name="productType" class="form-select">
+                            <select id="productSelect" name="productType" class="form-select">
                                 <option value="Apple">Apple</option>
                                 <option value="Banana">Banana</option>
                                 <option value="Orange">Orange</option>
                             </select>
                         </div>
-                        <br/>
+                        <br />
                         <label for="quantity">Quantity:</label>
                         <input name="quantity" class="form-control" type="number">
-                        <br/>
+                        <br />
                         <button type="submit" class="btn btn-primary accent-color">Add Product</button>
                     </fieldset>
                     <button type="submit" class="btn btn-primary accent-color">Submit Order</button>
@@ -94,12 +94,10 @@
                         <th></th>
                         <td>$14.85</td>
                     </tr>
-
                 </tbody>
             </table>
         </div>
         <address>
-
         </address>
     </main>
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
