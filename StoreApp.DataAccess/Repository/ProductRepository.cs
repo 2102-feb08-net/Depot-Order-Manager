@@ -40,5 +40,12 @@ namespace StoreApp.DataAccess.Repository
             else
                 return null;
         }
+
+        public async Task<IEnumerable<IProduct>> GetAllProducts()
+        {
+            using var context = new DigitalStoreContext(Options);
+
+            return await context.Products.Select(p => new Library.Model.Product(p.Name, p.Category, p.UnitPrice, p.Id)).ToListAsync();
+        }
     }
 }

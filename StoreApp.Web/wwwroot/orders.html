@@ -8,26 +8,35 @@
     <link rel="stylesheet" href="design.css" type="text/css">
     <title>Orders</title>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <div id="nav-placeholder"></div>
 
     <main>
         <h1 class="page-title">Orders</h1>
 
-        <table class="table table-striped table-hover customer-table">
-            <thead>
-                <tr>
-                    <th>Order#</th>
-                    <th>Date/Time</th>
-                    <th>Customer</th>
-                    <th>Location</th>
-                    <th>Total Price</th>
-                </tr>
-            </thead>
-            <tbody id="orderTableBody">
-            </tbody>
-        </table>
+        <div class="container">
+            <table class="table table-striped table-hover customer-table">
+                <thead>
+                    <tr>
+                        <th>Order#</th>
+                        <th>Date/Time</th>
+                        <th>Customer</th>
+                        <th>Location</th>
+                        <th>Total Price</th>
+                    </tr>
+                </thead>
+                <tbody id="orderTableBody">
+                </tbody>
+            </table>
+        </div>
     </main>
+
+    <footer class="footer mt-auto text-center py-3 bg-light">
+        <div class="container">
+            <span class="text-muted">© 2021 Bryson Ewell</span>
+        </div>
+    </footer>
+
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <script src="Nav/navbar.js"></script>

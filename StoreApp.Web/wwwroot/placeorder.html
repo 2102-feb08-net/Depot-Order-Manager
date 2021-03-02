@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="design.css" type="text/css">
     <title>Orders</title>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <div id="nav-placeholder"></div>
 
     <main>
@@ -20,18 +20,12 @@
                     <div class="form-group">
                         <label for="customer">Customer:</label>
                         <select id="customerSelect" name="customer" class="form-select">
-                            <option value="A">Bryson Ewell</option>
-                            <option value="B">John Doe</option>
-                            <option value="C">Mary Sue</option>
                         </select>
                     </div>
                     <br />
                     <div class="form-group">
                         <label for="location">Location:</label>
                         <select id="locationSelect" name="location" class="form-select">
-                            <option value="HQ">HQ</option>
-                            <option value="Warehouse_East1">Warehouse_East1</option>
-                            <option value="Warehouse_West1">Warehouse_West1</option>
                         </select>
                     </div>
                     <br />
@@ -40,16 +34,13 @@
                         <div class="form-group">
                             <label for="productType">Product:</label>
                             <select id="productSelect" name="productType" class="form-select">
-                                <option value="Apple">Apple</option>
-                                <option value="Banana">Banana</option>
-                                <option value="Orange">Orange</option>
                             </select>
                         </div>
                         <br />
                         <label for="quantity">Quantity:</label>
-                        <input name="quantity" class="form-control" type="number">
+                        <input id="quantityInput" name="quantity" class="form-control" type="number" min="0">
                         <br />
-                        <button type="submit" class="btn btn-primary accent-color">Add Product</button>
+                        <button id="addProductButton" type="button" class="btn btn-primary accent-color">Add Product</button>
                     </fieldset>
                     <button type="submit" class="btn btn-primary accent-color">Submit Order</button>
                 </form>
@@ -60,39 +51,20 @@
                     <tr>
                         <th onclick="alert('ID');">Product#</th>
                         <th onclick="alert('First Name');">Product Name</th>
+                        <th onclick="alert('Last Name');">Category</th>
                         <th onclick="alert('Last Name');">Unit Price</th>
                         <th onclick="alert('Last Name');">Quantity</th>
                         <th onclick="alert('Last Name');">Total Price</th>
                     </tr>
                 </thead>
-                <tbody id="customerTable">
-                    <tr>
-                        <td>1</td>
-                        <td>Apple</td>
-                        <td>$0.99</td>
-                        <td>5</td>
-                        <td>$4.95</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Banana</td>
-                        <td>$0.99</td>
-                        <td>5</td>
-                        <td>$4.95</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Orange</td>
-                        <td>$0.99</td>
-                        <td>5</td>
-                        <td>$4.95</td>
-                    </tr>
+                <tbody id="productTableBody">
                     <tr>
                         <th>Total</th>
                         <th></th>
                         <th></th>
                         <th></th>
-                        <td>$14.85</td>
+                        <th></th>
+                        <td>$0.00</td>
                     </tr>
                 </tbody>
             </table>
@@ -100,8 +72,16 @@
         <address>
         </address>
     </main>
+
+    <footer class="footer mt-auto text-center py-3 bg-light">
+        <div class="container">
+            <span class="text-muted">© 2021 Bryson Ewell</span>
+        </div>
+    </footer>
+
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <script src="Nav/navbar.js"></script>
+    <script src="placeorder.js"></script>
 </body>
 </html>

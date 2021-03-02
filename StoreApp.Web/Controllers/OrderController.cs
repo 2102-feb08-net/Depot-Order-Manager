@@ -28,5 +28,11 @@ namespace StoreApp.Web.Controllers
                 TotalPrice = OrderProcessor.CalculateTotalPrice(o)
             });
         }
+
+        [HttpGet("/api/orders/{id}")]
+        public async Task<IEnumerable<OrderHead>> GetOrderDetails(int id)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

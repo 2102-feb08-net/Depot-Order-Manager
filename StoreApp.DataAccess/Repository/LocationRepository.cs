@@ -55,5 +55,17 @@ namespace StoreApp.DataAccess.Repository
 
             return location;
         }
+
+        public async Task<List<Library.Model.Location>> GetLocationsAsync()
+        {
+            using var context = new DigitalStoreContext(Options);
+
+            return await context.StoreLocations.Select(l => new Library.Model.Location(
+                l.Name,
+                l.Address.Print(),
+                new Dictionary<Library.Model.IProduct, int>(),
+                l.Id
+            )).ToListAsync();
+        }
     }
 }

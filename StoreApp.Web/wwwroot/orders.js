@@ -32,3 +32,10 @@ function addOrderRow(id, dateTime, customer, storeLocation, totalPrice) {
 }
 
 loadOrders();
+
+class Product {
+    constructor(productId, quantity) {
+        this.id = productId;
+        this.quantity = quantity;
+    }
+}

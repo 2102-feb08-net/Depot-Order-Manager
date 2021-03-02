@@ -3,25 +3,29 @@
 const table = document.getElementById("customerTableBody");
 
 let customerForm = document.getElementById('customerForm');
-customerForm.onsubmit = () => {
-    fetch("/api/customers/add")
-        .then(
-            customers => {
-                const firstName = document.getElementById("firstName_Input").value;
-                const lastName = document.getElementById("lastName_Input").value;
+customerForm.onsubmit = createCustomer;
+// () => {
+    // fetch("/api/customers/add")
+    //     .then(
+    //         customers => {
+    //             const firstName = document.getElementById("firstName_Input").value;
+    //             const lastName = document.getElementById("lastName_Input").value;
 
-                addCustomerRow('?', firstName, lastName);
-            },
-            Error => {
-                alert("Failed to add customer: " + customer.firstName + " " + customer.lastName);
-            }
-        );
-};
+    //             addCustomerRow('?', firstName, lastName);
+    //         },
+    //         Error => {
+    //             alert("Failed to add customer: " + customer.firstName + " " + customer.lastName);
+    //         }
+    //     );
+// };
 
 async function loadCustomers() {
     const response = await fetch("/api/customers/getall");
 
+    document.getElementById("loadingTable").hidden = true;
+
     if (!response.ok) {
+        document.getElementById("failedToLoadTable").hidden = false;
         throw new Error(`Unable to download customers from server: (${response.status}) ${response.statusText}`);
     }
 
@@ -29,6 +33,28 @@ async function loadCustomers() {
 
     for (const customer of customers) {
         addCustomerRow(customer.id, customer.firstName, customer.lastName);
+    }
+}
+
+async function createCustomer() {
+    const customer = {
+        firstName: document.getElementById("firstName_Input").value,
+        lastName: document.getElementById("lastName_Input").value,
+    }
+
+    const options = {
+        method: "POST",
+        body: JSON.stringify(customer),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    let response = await fetch("/api/customers/add", options);
+
+    if(!response.ok)
+    {
+        alert("Failed to add customer: " + customer.firstName + " " + customer.lastName);
     }
 }
 

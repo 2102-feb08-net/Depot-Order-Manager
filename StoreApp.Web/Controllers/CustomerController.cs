@@ -24,6 +24,6 @@ namespace StoreApp.Web.Controllers
         }
 
         [HttpPost("api/customers/add")]
-        public void AddCustomer() => throw new System.NotImplementedException();
+        public async Task AddCustomer(NewCustomer customer) => await customerRepo.CreateCustomerAsync(customer);
     }
 }

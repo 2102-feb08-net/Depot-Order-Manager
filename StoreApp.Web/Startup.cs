@@ -68,8 +68,8 @@ namespace StoreApp.Web
             static void logger(string s)
             {
                 Debug.WriteLine(s);
-                using StreamWriter writer = new StreamWriter(CONNECTION_LOG_PATH, append: true);
-                writer.WriteLine(s);
+                //using StreamWriter writer = new StreamWriter(CONNECTION_LOG_PATH, append: true);
+                //writer.WriteLine(s);
             }
 
             Connection.Logger = logger;
