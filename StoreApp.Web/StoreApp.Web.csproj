@@ -12,4 +12,10 @@
     <ProjectReference Include="..\StoreApp.DataAccess\StoreApp.DataAccess.csproj" />
     <ProjectReference Include="..\StoreApp.Library\StoreApp.Library.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="connection-string.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

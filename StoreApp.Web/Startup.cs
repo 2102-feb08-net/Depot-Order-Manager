@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -53,6 +55,24 @@ namespace StoreApp.Web
             {
                 endpoints.MapControllers();
             });
+
+            LoadConnectionString();
+        }
+
+        private static void LoadConnectionString()
+        {
+            const string CONNECTION_STRING_PATH = "connection-string.txt";
+            const string CONNECTION_LOG_PATH = "connection-log.txt";
+            Connection.ConnectionString = File.ReadAllText(CONNECTION_STRING_PATH);
+
+            static void logger(string s)
+            {
+                Debug.WriteLine(s);
+                using StreamWriter writer = new StreamWriter(CONNECTION_LOG_PATH, append: true);
+                writer.WriteLine(s);
+            }
+
+            Connection.Logger = logger;
         }
     }
 }

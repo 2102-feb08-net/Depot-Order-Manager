@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 
 namespace StoreApp.Web
 {
-    public class Connection
+    public static class Connection
     {
         // This is only temporary.
-        public static string CONNECTION_STRING = string.Empty;
+        public static string ConnectionString { get; set; }
+
+        public static Action<string> Logger { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace StoreApp.Web.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private CustomerRepository customerRepo = new CustomerRepository(Connection.CONNECTION_STRING, null);
+        private readonly CustomerRepository customerRepo = new CustomerRepository(Connection.ConnectionString, null);
 
         private const int PAGE_SIZE = 10;
 
@@ -24,9 +24,6 @@ namespace StoreApp.Web.Controllers
         }
 
         [HttpPost("api/customers/add")]
-        public void AddCustomer()
-        {
-            throw new System.NotImplementedException();
-        }
+        public void AddCustomer() => throw new System.NotImplementedException();
     }
 }
