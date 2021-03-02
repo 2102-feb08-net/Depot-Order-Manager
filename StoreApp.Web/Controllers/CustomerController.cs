@@ -12,7 +12,7 @@ namespace StoreApp.Web.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly CustomerRepository customerRepo = new CustomerRepository(Connection.ConnectionString, null);
+        private readonly CustomerRepository customerRepo = new CustomerRepository(Connection.ConnectionString, Connection.Logger);
 
         private const int PAGE_SIZE = 10;
 

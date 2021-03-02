@@ -13,7 +13,7 @@ namespace StoreApp.Web.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly OrderRepository orderRepo = new OrderRepository(Connection.ConnectionString, null);
+        private readonly OrderRepository orderRepo = new OrderRepository(Connection.ConnectionString, Connection.Logger);
 
         [HttpGet("/api/orders/getall")]
         public async Task<IEnumerable<OrderHead>> GetOrders()
