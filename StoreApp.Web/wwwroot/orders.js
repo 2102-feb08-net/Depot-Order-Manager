@@ -25,14 +25,18 @@ async function showOrderDetails(orderId) {
 
     let details = await response.json();
 
-    for (const product of details.orderLines)
-        addOrderLineRow(productTable, product);
+    for (const line of details.lines)
+        addOrderLineRow(productTable, line.product, line.quantity, line.lineTotalPrice);
+
+    updateTotalRow(productTable, details.orderTotalPrice);
+
+    document.getElementById("orderIdTitle").innerHTML = details.Head.id;
 
     document.getElementById("orderTableContainer").hidden = true;
     document.getElementById("orderDetailsContainer").hidden = false;
 }
 
-function addOrderLineRow(table, product) {
+function addOrderLineRow(table, product, quantity, linePrice) {
     let row = table.insertRow(0);
     let idCell = row.insertCell();
     let nameCell = row.insertCell();
@@ -41,24 +45,26 @@ function addOrderLineRow(table, product) {
     let quantityCell = row.insertCell();
     let totalPriceCell = row.insertCell();
 
-    let price = truncateToDecimals(product.unitPrice);
+    let unitPrice = truncateToDecimals(product.unitPrice);
+    linePrice = truncateToDecimals(linePrice);
 
     idCell.innerHTML = product.id;
     nameCell.innerHTML = product.name;
     categoryCell.innerHTML = product.category;
-    priceCell.innerHTML = "$" + price;
-    quantityCell.innerHTML = product.quantity;
-    totalPriceCell.innerHTML = "$" + (price * product.quantity);
+    priceCell.innerHTML = "$" + unitPrice;
+    quantityCell.innerHTML = quantity;
+    totalPriceCell.innerHTML = "$" + linePrice;
 }
 
-function updateTotalRow(table) {
+function updateTotalRow(table, totalPrice) {
     const lastRow = table.rows[table.rows.length - 1];
     const totalPriceCell = lastRow.cells[lastRow.cells.length - 1];
 
-    let total = 0;
-    for (let product of productPriceViews)
-        total += product.totalPrice;
+    let total = truncateToDecimals(totalPrice);
     totalPriceCell.innerHTML = "$" + truncateToDecimals(total);
+}
+
+function goBackFromDetails() {
 }
 
 function addOrderRow(id, dateTime, customer, storeLocation, totalPrice) {

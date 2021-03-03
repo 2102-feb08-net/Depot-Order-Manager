@@ -23,28 +23,57 @@ namespace StoreApp.Web.Controllers
         [HttpGet("/api/orders/getall")]
         public async Task<IEnumerable<OrderHead>> GetOrders()
         {
-            var orders = await _orderRepo.GetAllProcessedOrders();
-            return orders.Select(o => new OrderHead()
-            {
-                Id = o.Id,
-                CustomerId = o.Customer.Id,
-                Customer = o.Customer,
-                StoreLocation = o.StoreLocation,
-                OrderTime = o.OrderTime.HasValue ? o.OrderTime.Value.DateTime.ToString("D") : "No Data",
-                TotalPrice = OrderProcessor.CalculateTotalPrice(o)
-            });
+            var orders = await _orderRepo.GetAllProcessedOrdersAsync();
+            return orders.Select(o => ConvertOrderToOnlyHead(o));
         }
 
         [HttpGet("/api/orders/{id}")]
-        public async Task<IReadOnlyOrder> GetOrderDetails(int id)
+        public async Task<FullOrder> GetOrderDetails(int id)
         {
-            return await _orderRepo.GetOrder(id);
+            var order = await _orderRepo.GetOrderAsync(id);
+            var head = ConvertOrderToOnlyHead(order);
+            var lines = ConvertOrderToOrderLines(order);
+
+            return new FullOrder()
+            {
+                Head = head,
+                Lines = lines,
+                OrderTotalPrice = lines.Sum(l => l.LineTotalPrice)
+            };
         }
 
         [HttpPost("/api/orders/send-order")]
         public async Task SendOrder(OrderTemplate orderTemplate)
         {
-            await _orderRepo.SendOrderTransaction(orderTemplate);
+            await _orderRepo.SendOrderTransactionAsync(orderTemplate);
+        }
+
+        private OrderHead ConvertOrderToOnlyHead(IReadOnlyOrder order)
+        {
+            return new OrderHead()
+            {
+                Id = order.Id,
+                CustomerId = order.Customer.Id,
+                Customer = order.Customer,
+                StoreLocation = order.StoreLocation,
+                OrderTime = order.OrderTime.HasValue ? order.OrderTime.Value.DateTime.ToString("D") : "No Data",
+                TotalPrice = OrderProcessor.CalculateTotalPrice(order)
+            };
+        }
+
+        private static List<IOrderLine> ConvertOrderToOrderLines(IReadOnlyOrder order)
+        {
+            List<IOrderLine> lines = new List<IOrderLine>();
+            foreach (var line in order.ShoppingCartQuantity)
+            {
+                lines.Add(new OrderLine()
+                {
+                    Product = line.Key,
+                    Quantity = line.Value,
+                    LineTotalPrice = line.Key.UnitPrice * line.Value, //TODO: Refactor into business logic
+                });
+            }
+            return lines;
         }
     }
 }

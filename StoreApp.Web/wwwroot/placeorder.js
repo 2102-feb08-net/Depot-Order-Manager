@@ -144,6 +144,8 @@ async function submitOrder() {
     if (!response.ok) {
         alert("Failed to submit order: " + response.message);
     }
+
+    alert(response.status);
 }
 
 orderForm.onsubmit = () => {

@@ -31,7 +31,7 @@ namespace StoreApp.DataAccess.Repository
         /// </summary>
         /// <param name="order">The order template to process</param>
         /// <returns>Returns an async task that completes when the transaction is complete</returns>
-        public async Task SendOrderTransaction(IOrderTemplate order)
+        public async Task SendOrderTransactionAsync(IOrderTemplate order)
         {
             if (order.OrderLines.Count == 0)
                 throw new OrderException("Cannot submit order with no products in cart.");
@@ -78,7 +78,7 @@ namespace StoreApp.DataAccess.Repository
                     Quantity = orderLine.Quantity,
                     Product = inventory.Product,
                     PurchaseOrder = purchaseOrder,
-                    PurchaseUnitPrice = inventory.Product.UnitPrice
+                    PurchaseUnitPrice = inventory.Product.UnitPrice,
                 });
             }
         }
@@ -88,7 +88,7 @@ namespace StoreApp.DataAccess.Repository
         /// </summary>
         /// <param name="customer"></param>
         /// <returns>Returns a list of all of the orders found</returns>
-        public async Task<List<IReadOnlyOrder>> GetOrdersFromCustomer(Library.Model.ICustomer customer)
+        public async Task<List<IReadOnlyOrder>> GetOrdersFromCustomerAsync(Library.Model.ICustomer customer)
         {
             var purchaseOrders = await _context.PurchaseOrders
                 .Include(p => p.Customer)
@@ -108,7 +108,7 @@ namespace StoreApp.DataAccess.Repository
         /// </summary>
         /// <param name="locationName">The name of the location.</param>
         /// <returns>Returns a list of all of the orders found.</returns>
-        public async Task<List<IReadOnlyOrder>> GetOrdersFromLocation(string locationName)
+        public async Task<List<IReadOnlyOrder>> GetOrdersFromLocationAsync(string locationName)
         {
             var purchaseOrders = await _context.PurchaseOrders
                 .Include(p => p.Customer)
@@ -153,7 +153,7 @@ namespace StoreApp.DataAccess.Repository
         /// Gets all of the processed orders in the database.
         /// </summary>
         /// <returns>Returns an IEnumerable of all of the orders as readonly</returns>
-        public async Task<IEnumerable<IReadOnlyOrder>> GetAllProcessedOrders()
+        public async Task<IEnumerable<IReadOnlyOrder>> GetAllProcessedOrdersAsync()
         {
             var purchaseOrders = await _context.PurchaseOrders
                                         .Include(p => p.Customer)
@@ -169,7 +169,7 @@ namespace StoreApp.DataAccess.Repository
         /// </summary>
         /// <param name="orderId">The Id of the order.</param>
         /// <returns>Returns the order with its information.</returns>
-        public async Task<IReadOnlyOrder> GetOrder(int orderId)
+        public async Task<IReadOnlyOrder> GetOrderAsync(int orderId)
         {
             var orders = await _context.PurchaseOrders
                  .Include(p => p.Customer)

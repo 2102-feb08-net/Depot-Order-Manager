@@ -49,6 +49,9 @@ namespace StoreApp.Library.Model
             if (orderTime > DateTime.Now)
                 throw new ArgumentException(paramName: nameof(orderTime), message: "Order time cannot be in the future.");
 
+            if (orderTime == default)
+                throw new ArgumentException(paramName: nameof(orderTime), message: "Order time must be set.");
+
             if (id <= 0)
                 throw new ArgumentException(paramName: nameof(id), message: "ID must be greater than 0.");
 

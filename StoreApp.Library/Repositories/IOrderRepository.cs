@@ -17,33 +17,33 @@ namespace StoreApp.Library
         /// </summary>
         /// <param name="customer"></param>
         /// <returns>Returns a list of all orders found</returns>
-        Task<List<IReadOnlyOrder>> GetOrdersFromCustomer(ICustomer customer);
+        Task<List<IReadOnlyOrder>> GetOrdersFromCustomerAsync(ICustomer customer);
 
         /// <summary>
         /// Retrieves all of the orders from the specified location name.
         /// </summary>
         /// <param name="locationName"></param>
         /// <returns>Returns a list of all orders found</returns>
-        Task<List<IReadOnlyOrder>> GetOrdersFromLocation(string locationName);
+        Task<List<IReadOnlyOrder>> GetOrdersFromLocationAsync(string locationName);
 
         /// <summary>
         /// Sends and processes an order to the database using an IOrderTemplate.
         /// </summary>
         /// <param name="order">The order template to process</param>
         /// <returns>Returns an async task that completes when the transaction is complete</returns>
-        Task SendOrderTransaction(IOrderTemplate order);
+        Task SendOrderTransactionAsync(IOrderTemplate order);
 
         /// <summary>
         /// Gets all of the processed orders in the database.
         /// </summary>
         /// <returns>Returns an IEnumerable of all of the orders as readonly</returns>
-        Task<IEnumerable<IReadOnlyOrder>> GetAllProcessedOrders();
+        Task<IEnumerable<IReadOnlyOrder>> GetAllProcessedOrdersAsync();
 
         /// <summary>
         /// Get all of the information about a single order.
         /// </summary>
         /// <param name="orderId">The Id of the order.</param>
         /// <returns>Returns the order with its information.</returns>
-        Task<IReadOnlyOrder> GetOrder(int orderId);
+        Task<IReadOnlyOrder> GetOrderAsync(int orderId);
     }
 }

@@ -68,11 +68,10 @@ namespace StoreApp.Web
             });
         }
 
-        private static void BuildDbOptions(DbContextOptionsBuilder builder)
+        private void BuildDbOptions(DbContextOptionsBuilder builder)
         {
-            const string CONNECTION_STRING_PATH = "connection-string.txt";
-            string connection = File.ReadAllText(CONNECTION_STRING_PATH);
-            builder.UseSqlServer(connection);
+            string connectionString = Configuration.GetConnectionString("DigitalStoreDb");
+            builder.UseSqlServer(connectionString);
         }
     }
 }
