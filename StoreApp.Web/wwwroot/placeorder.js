@@ -1,6 +1,7 @@
 'use strict';
 
 const table = document.getElementById("productTableBody");
+const orderForm = document.getElementById("orderForm");
 
 async function loadCustomers() {
     const response = await fetch("/api/customers/getall");
@@ -45,16 +46,10 @@ async function loadProducts() {
 }
 
 async function loadAll(url, typeName, selectElementId, displayName, value) {
-     
 }
 
 function addToSelect(selectElementId, displayName, value) {
     document.getElementById(selectElementId).options.add(new Option(displayName, value));
-}
-
-function truncateToDecimals(num, dec = 2) {
-    const calcDec = Math.pow(10, dec);
-    return Math.trunc(num * calcDec) / calcDec;
 }
 
 function addProductRow(id, name, category, unitPrice, quantity) {
@@ -73,16 +68,15 @@ function addProductRow(id, name, category, unitPrice, quantity) {
     categoryCell.innerHTML = category;
     priceCell.innerHTML = "$" + price;
     quantityCell.innerHTML = quantity;
-    totalPriceCell.innerHTML ="$" + (price * quantity);
+    totalPriceCell.innerHTML = "$" + (price * quantity);
 }
 
-function updateTotalRow()
-{
-    const lastRow =table.rows[table.rows.length -1];
-    const totalPriceCell = lastRow.cells[lastRow.cells.length -1];
-    
+function updateTotalRow(table) {
+    const lastRow = table.rows[table.rows.length - 1];
+    const totalPriceCell = lastRow.cells[lastRow.cells.length - 1];
+
     let total = 0;
-    for(let product of productCart)
+    for (let product of productPriceViews)
         total += product.totalPrice;
     totalPriceCell.innerHTML = "$" + truncateToDecimals(total);
 }
@@ -92,6 +86,7 @@ loadLocations();
 loadProducts();
 
 let productCart = [];
+let productPriceViews = [];
 
 let addProductButton = document.getElementById("addProductButton");
 let quantityInput = document.getElementById("quantityInput");
@@ -102,8 +97,9 @@ addProductButton.onclick = () => {
 
     if (productIsValid(productObject, quantity)) {
         addProductRow(productObject.id, productObject.name, productObject.category, productObject.unitPrice, quantity);
-        productCart.push(new Product(productObject.id, quantity * truncateToDecimals(productObject.unitPrice)));
-        updateTotalRow();
+        productPriceViews.push(new ProductPriceView(productObject.id, quantity * truncateToDecimals(productObject.unitPrice)));
+        productCart.push(new Product(productObject.id, Number(quantity)));
+        updateTotalRow(table);
     }
     else {
         alert("Product and/or quantity is invalid. Failed to add to order.");
@@ -114,9 +110,42 @@ function productIsValid(product, quantity) {
     return product.id > 0 && quantity > 0;
 }
 
-class Product {
+class ProductPriceView {
     constructor(id, totalPrice) {
         this.id = id;
         this.totalPrice = totalPrice;
     }
 }
+
+class Product {
+    constructor(productId, quantity) {
+        this.productId = productId;
+        this.quantity = quantity;
+    }
+}
+
+async function submitOrder() {
+    const order = {
+        customerId: document.getElementById("customerSelect").value,
+        storeLocationId: document.getElementById("locationSelect").value,
+        orderLines: productCart,
+    }
+
+    const options = {
+        method: "POST",
+        body: JSON.stringify(order),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    let response = await fetch("/api/orders/send-order", options);
+
+    if (!response.ok) {
+        alert("Failed to submit order: " + response.message);
+    }
+}
+
+orderForm.onsubmit = () => {
+    submitOrder();
+};

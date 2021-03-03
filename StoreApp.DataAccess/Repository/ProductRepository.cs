@@ -13,15 +13,18 @@ namespace StoreApp.DataAccess.Repository
     /// <summary>
     /// Repository for manipulation of Product data
     /// </summary>
-    public class ProductRepository : BaseRepository, IProductRepository
+    public class ProductRepository : IProductRepository
     {
+        private DigitalStoreContext _context;
+
         /// <summary>
         /// Constructs a new Product Repository
         /// </summary>
         /// <param name="connectionString">The connection string to connect to the database.</param>
         /// <param name="logger">The logger to log the connection.</param>
-        public ProductRepository(string connectionString, Action<string> logger) : base(connectionString, logger)
+        public ProductRepository(DigitalStoreContext context)
         {
+            _context = context;
         }
 
         /// <summary>
@@ -31,9 +34,7 @@ namespace StoreApp.DataAccess.Repository
         /// <returns>Returns a single product with the specified name.</returns>
         public async Task<IProduct> LookupProductFromName(string name)
         {
-            using var context = new DigitalStoreContext(Options);
-
-            var product = await context.Products.Where(c => c.Name == name).FirstOrDefaultAsync();
+            var product = await _context.Products.Where(c => c.Name == name).FirstOrDefaultAsync();
 
             if (product is not null)
                 return new Library.Model.Product(product.Name, product.Category, product.UnitPrice, product.Id);
@@ -41,11 +42,13 @@ namespace StoreApp.DataAccess.Repository
                 return null;
         }
 
+        /// <summary>
+        /// Gets all of the products in the database
+        /// </summary>
+        /// <returns>Returns an IEnumerable of IProducts</returns>
         public async Task<IEnumerable<IProduct>> GetAllProducts()
         {
-            using var context = new DigitalStoreContext(Options);
-
-            return await context.Products.Select(p => new Library.Model.Product(p.Name, p.Category, p.UnitPrice, p.Id)).ToListAsync();
+            return await _context.Products.Select(p => new Library.Model.Product(p.Name, p.Category, p.UnitPrice, p.Id)).ToListAsync();
         }
     }
 }

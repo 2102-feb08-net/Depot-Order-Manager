@@ -12,12 +12,17 @@ namespace StoreApp.Web.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly ProductRepository productRepo = new ProductRepository(Connection.ConnectionString, Connection.Logger);
+        private readonly IProductRepository _productRepo;
+
+        public ProductController(IProductRepository productRepo)
+        {
+            _productRepo = productRepo;
+        }
 
         [HttpGet("/api/products/getall")]
         public async Task<IEnumerable<IProduct>> GetAllProducts()
         {
-            return await productRepo.GetAllProducts();
+            return await _productRepo.GetAllProducts();
         }
     }
 }

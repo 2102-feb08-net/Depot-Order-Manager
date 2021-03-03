@@ -11,7 +11,13 @@ namespace StoreApp.Web.Model
         /// <summary>
         /// The customer who made the order.
         /// </summary>
-        public ICustomer Customer { get; init; }
+        /// <remarks>Uses int fo customer Id instead of ICustomer because there is some issues with serializing inherited interfaces</remarks>
+        public int CustomerId { get; init; }
+
+        /// <summary>
+        /// The customer who made the order. It has just the name.
+        /// </summary>
+        public INewCustomer Customer { get; init; }
 
         /// <summary>
         /// The location that the order was placed from.
@@ -19,12 +25,12 @@ namespace StoreApp.Web.Model
         public ILocation StoreLocation { get; init; }
 
         /// <summary>
-        /// The time the order was proccessed. Will always be null for this type.
+        /// The time the order was proccessed.
         /// </summary>
         public string OrderTime { get; init; }
 
         /// <summary>
-        /// The ID of the order. Will always be null for this type.
+        /// The ID of the order.
         /// </summary>
         public int? Id { get; init; }
 

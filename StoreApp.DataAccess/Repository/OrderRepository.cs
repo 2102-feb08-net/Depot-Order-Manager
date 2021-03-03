@@ -12,81 +12,73 @@ namespace StoreApp.DataAccess.Repository
     /// <summary>
     /// Repository for manipulation of Order data
     /// </summary>
-    public class OrderRepository : BaseRepository, IOrderRepository
+    public class OrderRepository : IOrderRepository
     {
+        private DigitalStoreContext _context;
+
         /// <summary>
         /// Constructs a new Order Repository
         /// </summary>
         /// <param name="connectionString">The connection string to connect to the database.</param>
         /// <param name="logger">The logger to log the connection.</param>
-        public OrderRepository(string connectionString, Action<string> logger) : base(connectionString, logger)
+        public OrderRepository(DigitalStoreContext context)
         {
+            _context = context;
         }
 
         /// <summary>
-        /// Sends and process an order to the database.
+        /// Sends and processes an order to the database using an IOrderTemplate.
         /// </summary>
-        /// <param name="order">The order to process</param>
-        public async Task SendOrderTransaction(IOrder order)
+        /// <param name="order">The order template to process</param>
+        /// <returns>Returns an async task that completes when the transaction is complete</returns>
+        public async Task SendOrderTransaction(IOrderTemplate order)
         {
-            using var context = new DigitalStoreContext(Options);
-
-            if (order.ShoppingCartQuantity.Count == 0)
+            if (order.OrderLines.Count == 0)
                 throw new OrderException("Cannot submit order with no products in cart.");
-
-            var productIds = order.ShoppingCartQuantity.Keys.Select(s => s.Id).ToList();
-            var foundProducts = await context.Products.Where(p => productIds.Contains(p.Id)).ToListAsync();
-
-            if (productIds.Count != foundProducts.Count)
-                throw new OrderException("One or more Products in cart did not exist in the database.");
 
             PurchaseOrder purchaseOrder = new PurchaseOrder()
             {
                 // TODO: Replace with proper authentication and unique identification using a Login System
-                CustomerId = order.Customer.Id,
+                CustomerId = order.CustomerId,
                 DateProcessed = DateTime.Now,
                 OrderLines = new List<OrderLine>(),
-                StoreLocationId = order.StoreLocation.Id
+                StoreLocationId = order.StoreLocationId
             };
 
-            await AddProductsToOrder(order, context, foundProducts, purchaseOrder);
+            await AddProductsToOrder(order, _context, purchaseOrder);
 
-            await context.PurchaseOrders.AddAsync(purchaseOrder);
+            await _context.PurchaseOrders.AddAsync(purchaseOrder);
 
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
-        private static async Task AddProductsToOrder(IOrder order, DigitalStoreContext context, List<Product> foundProducts, PurchaseOrder purchaseOrder)
+        private static async Task AddProductsToOrder(IOrderTemplate order, DigitalStoreContext context, PurchaseOrder purchaseOrder)
         {
             var inventories = await context.Inventories
+                .Include(i => i.Product)
                 .Where(i => i.StoreId == purchaseOrder.StoreLocationId).ToListAsync();
 
-            foreach (var productQuantity in order.ShoppingCartQuantity)
+            foreach (var orderLine in order.OrderLines)
             {
-                var product = productQuantity.Key;
-                int quantity = productQuantity.Value;
-
-                if (quantity <= 0)
+                if (orderLine.Quantity <= 0)
                     throw new OrderException("Cannot order products with a quantity less than or equal to 0.");
 
-                Product foundProduct = foundProducts.Find(p => p.Name == product.Name);
-
-                var inventory = inventories.Where(i => i.ProductId == foundProduct.Id).FirstOrDefault();
+                var inventory = inventories.Where(i => i.ProductId == orderLine.ProductId).FirstOrDefault();
 
                 if (inventory is null)
-                    throw new OrderException($"Store location does not contain the product '{product.Name}' in its inventory.");
+                    throw new OrderException($"Store location does not contain the product ID '{orderLine.ProductId}' in its inventory.");
 
-                if (inventory.Quantity >= quantity)
-                    inventory.Quantity -= quantity;
+                if (inventory.Quantity >= orderLine.Quantity)
+                    inventory.Quantity -= orderLine.Quantity;
                 else
-                    throw new OrderException($"The store location only has {inventory.Quantity} of '{inventory.Product.Name}' in stock, but the order is requesting to order {quantity} of the product.");
+                    throw new OrderException($"The store location only has {inventory.Quantity} of '{inventory.Product.Name}' in stock, but the order is requesting to order {orderLine.Quantity} of the product.");
 
                 purchaseOrder.OrderLines.Add(new OrderLine()
                 {
-                    Quantity = quantity,
-                    Product = foundProduct,
+                    Quantity = orderLine.Quantity,
+                    Product = inventory.Product,
                     PurchaseOrder = purchaseOrder,
-                    PurchaseUnitPrice = product.UnitPrice
+                    PurchaseUnitPrice = inventory.Product.UnitPrice
                 });
             }
         }
@@ -98,9 +90,7 @@ namespace StoreApp.DataAccess.Repository
         /// <returns>Returns a list of all of the orders found</returns>
         public async Task<List<IReadOnlyOrder>> GetOrdersFromCustomer(Library.Model.ICustomer customer)
         {
-            using var context = new DigitalStoreContext(Options);
-
-            var purchaseOrders = await context.PurchaseOrders
+            var purchaseOrders = await _context.PurchaseOrders
                 .Include(p => p.Customer)
                 .Include(p => p.OrderLines)
                 .ThenInclude(o => o.Product)
@@ -120,9 +110,7 @@ namespace StoreApp.DataAccess.Repository
         /// <returns>Returns a list of all of the orders found.</returns>
         public async Task<List<IReadOnlyOrder>> GetOrdersFromLocation(string locationName)
         {
-            using var context = new DigitalStoreContext(Options);
-
-            var purchaseOrders = await context.PurchaseOrders
+            var purchaseOrders = await _context.PurchaseOrders
                 .Include(p => p.Customer)
                 .Include(p => p.OrderLines)
                 .ThenInclude(o => o.Product)
@@ -161,17 +149,36 @@ namespace StoreApp.DataAccess.Repository
             return orders;
         }
 
+        /// <summary>
+        /// Gets all of the processed orders in the database.
+        /// </summary>
+        /// <returns>Returns an IEnumerable of all of the orders as readonly</returns>
         public async Task<IEnumerable<IReadOnlyOrder>> GetAllProcessedOrders()
         {
-            using var context = new DigitalStoreContext(Options);
-
-            var purchaseOrders = await context.PurchaseOrders
+            var purchaseOrders = await _context.PurchaseOrders
                                         .Include(p => p.Customer)
                                         .Include(p => p.OrderLines)
                                         .ThenInclude(o => o.Product)
                                         .Include(p => p.StoreLocation)
                                         .ThenInclude(s => s.Address).ToListAsync();
             return ConvertPurchaseOrderToIOrders(purchaseOrders);
+        }
+
+        /// <summary>
+        /// Get all of the information about a single order.
+        /// </summary>
+        /// <param name="orderId">The Id of the order.</param>
+        /// <returns>Returns the order with its information.</returns>
+        public async Task<IReadOnlyOrder> GetOrder(int orderId)
+        {
+            var orders = await _context.PurchaseOrders
+                 .Include(p => p.Customer)
+                 .Include(p => p.OrderLines)
+                 .ThenInclude(o => o.Product)
+                 .Include(p => p.StoreLocation)
+                 .ThenInclude(s => s.Address)
+                 .Where(o => o.Id == orderId).ToListAsync();
+            return ConvertPurchaseOrderToIOrders(orders).FirstOrDefault();
         }
     }
 }

@@ -10,15 +10,18 @@ namespace StoreApp.DataAccess.Repository
     /// <summary>
     /// Repository for manipulation of Location data
     /// </summary>
-    public class LocationRepository : BaseRepository, ILocationRepository
+    public class LocationRepository : ILocationRepository
     {
+        private DigitalStoreContext _context;
+
         /// <summary>
         /// Constructs a new Location Repository
         /// </summary>
         /// <param name="connectionString">The connection string to connect to the database.</param>
         /// <param name="logger">The logger to log the connection.</param>
-        public LocationRepository(string connectionString, Action<string> logger) : base(connectionString, logger)
+        public LocationRepository(DigitalStoreContext context)
         {
+            _context = context;
         }
 
         /// <summary>
@@ -28,9 +31,7 @@ namespace StoreApp.DataAccess.Repository
         /// <returns>Returns the location with the given name.</returns>
         public async Task<Library.Model.ILocation> LookUpLocationByNameAsync(string name)
         {
-            using var context = new DigitalStoreContext(Options);
-
-            var storeLocation = await context.StoreLocations
+            var storeLocation = await _context.StoreLocations
                 .Include(s => s.Inventories)
                 .ThenInclude(i => i.Product)
                 .Include(s => s.Address)
@@ -58,9 +59,7 @@ namespace StoreApp.DataAccess.Repository
 
         public async Task<List<Library.Model.Location>> GetLocationsAsync()
         {
-            using var context = new DigitalStoreContext(Options);
-
-            return await context.StoreLocations.Select(l => new Library.Model.Location(
+            return await _context.StoreLocations.Select(l => new Library.Model.Location(
                 l.Name,
                 l.Address.Print(),
                 new Dictionary<Library.Model.IProduct, int>(),

@@ -15,5 +15,11 @@ namespace StoreApp.DataAccess.Repository
         /// <param name="name">The name of the product.</param>
         /// <returns>Returns a single product with the specified name.</returns>
         Task<IProduct> LookupProductFromName(string name);
+
+        /// <summary>
+        /// Gets all of the products in the database
+        /// </summary>
+        /// <returns>Returns an IEnumerable of IProducts</returns>
+        Task<IEnumerable<IProduct>> GetAllProducts();
     }
 }

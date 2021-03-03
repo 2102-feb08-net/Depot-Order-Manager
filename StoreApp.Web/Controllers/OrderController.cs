@@ -13,15 +13,21 @@ namespace StoreApp.Web.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly OrderRepository orderRepo = new OrderRepository(Connection.ConnectionString, Connection.Logger);
+        private readonly IOrderRepository _orderRepo;
+
+        public OrderController(IOrderRepository orderRepo)
+        {
+            _orderRepo = orderRepo;
+        }
 
         [HttpGet("/api/orders/getall")]
         public async Task<IEnumerable<OrderHead>> GetOrders()
         {
-            var orders = await orderRepo.GetAllProcessedOrders();
+            var orders = await _orderRepo.GetAllProcessedOrders();
             return orders.Select(o => new OrderHead()
             {
                 Id = o.Id,
+                CustomerId = o.Customer.Id,
                 Customer = o.Customer,
                 StoreLocation = o.StoreLocation,
                 OrderTime = o.OrderTime.HasValue ? o.OrderTime.Value.DateTime.ToString("D") : "No Data",
@@ -30,9 +36,15 @@ namespace StoreApp.Web.Controllers
         }
 
         [HttpGet("/api/orders/{id}")]
-        public async Task<IEnumerable<OrderHead>> GetOrderDetails(int id)
+        public async Task<IReadOnlyOrder> GetOrderDetails(int id)
         {
-            throw new System.NotImplementedException();
+            return await _orderRepo.GetOrder(id);
+        }
+
+        [HttpPost("/api/orders/send-order")]
+        public async Task SendOrder(OrderTemplate orderTemplate)
+        {
+            await _orderRepo.SendOrderTransaction(orderTemplate);
         }
     }
 }

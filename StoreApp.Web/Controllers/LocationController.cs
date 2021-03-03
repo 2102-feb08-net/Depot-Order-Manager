@@ -13,12 +13,17 @@ namespace StoreApp.Web.Controllers
     [ApiController]
     public class LocationController : ControllerBase
     {
-        private readonly LocationRepository locationRepo = new LocationRepository(Connection.ConnectionString, Connection.Logger);
+        private readonly ILocationRepository _locationRepo;
+
+        public LocationController(ILocationRepository locationRepo)
+        {
+            _locationRepo = locationRepo;
+        }
 
         [HttpGet("api/locations/getall")]
         public async Task<IEnumerable<LocationHead>> GetAllLocations()
         {
-            var locations = await locationRepo.GetLocationsAsync();
+            var locations = await _locationRepo.GetLocationsAsync();
             return locations.Select(l => new LocationHead()
             {
                 Id = l.Id,
