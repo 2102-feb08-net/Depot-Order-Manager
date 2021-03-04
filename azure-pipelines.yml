@@ -19,9 +19,11 @@ steps:
   displayName: 'dotnet test $(buildConfiguration)'
 - script: dotnet publish
   displayName: 'dotnet publish'
-
-- task: AzureWebApp@1
+  
+- task: AzureRmWebAppDeployment@4
   inputs:
-    azureSubscription: '7b0f809c-844b-477f-b985-811ff1bab8fe'
-    appName: 'bewell-storeapp-revature'
-    package: $(System.DefaultWorkingDirectory)/**/*.zip   
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Free Trial(7b0f809c-844b-477f-b985-811ff1bab8fe)'
+    appType: 'webApp'
+    WebAppName: 'bewell-storeapp-revature'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
