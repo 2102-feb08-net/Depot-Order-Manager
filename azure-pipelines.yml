@@ -12,24 +12,6 @@ pool:
 variables:
   buildConfiguration: 'Release'
 
-# steps:
-# - script: dotnet build --configuration $(buildConfiguration)
-#   displayName: 'dotnet build $(buildConfiguration)'
-# - script: dotnet test --configuration $(buildConfiguration)
-#   displayName: 'dotnet test $(buildConfiguration)'
-# - script: dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactsStagingDirectory)/$(Build.BuildId).zip
-#   displayName: 'dotnet publish $(buildConfiguration)'
-  
-# - task: ArchiveFiles@2
-#   inputs:
-#     rootFolderOrFile: '$(System.DefaultWorkingDirectory)/$(startupProject)/bin/$(buildConfiguration)/**/publish/'
-#     includeRootFolder: true
-#     archiveType: 'zip'
-#     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-#     replaceExistingArchive: true
-
-
-
 steps:
 - task: DotNetCoreCLI@2
   displayName: Build
@@ -41,7 +23,6 @@ steps:
   inputs:
     command: test
     arguments: '--configuration $(BuildConfiguration)'
-    zipAfterPublish: true
 - task: DotNetCoreCLI@2
   displayName: Publish
   inputs:
@@ -49,12 +30,6 @@ steps:
     publishWebProjects: true
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(Build.BuildId)'
     zipAfterPublish: true
-
-
-# - task: PublishBuildArtifacts@1
-#   inputs:
-#     PathtoPublish: $(Build.ArtifactsStagingDirectory)/$(Build.BuildId).zip
-#     ArtifactName: drop
 
 - task: AzureWebApp@1
   inputs:
