@@ -47,7 +47,7 @@ steps:
   inputs:
     command: publish
     publishWebProjects: true
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactsStagingDirectory)/$(Build.BuildId)'
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(Build.BuildId)'
     zipAfterPublish: true
 
 
@@ -61,4 +61,4 @@ steps:
     azureSubscription: 'Free Trial(7b0f809c-844b-477f-b985-811ff1bab8fe)'
     appType: 'webApp'
     appName: 'bewell-storeapp-revature'
-    package: '$(Build.ArtifactsStagingDirectory)/$(Build.BuildId).zip'
+    package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
