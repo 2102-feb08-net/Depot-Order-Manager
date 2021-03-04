@@ -8,6 +8,7 @@ namespace StoreApp.Library.Tests
     public class LocationTests
     {
         private readonly IProduct apple = new Product(name: "Apple", category: "Food", unitPrice: 1.29m, id: 1);
+        private static readonly IAddress address = new Address("1234 Address", "Apt. 2", "Newcity", "Nezona", "United States", 12345);
 
         [Fact]
         public void Location_Constructor_Success()
@@ -15,7 +16,7 @@ namespace StoreApp.Library.Tests
             // arrange
 
             // act
-            ILocation location = new Location("Location Name", "1234 Address", new Dictionary<IProduct, int>(), id: 1);
+            ILocation location = new Location("Location Name", address, new Dictionary<IProduct, int>(), id: 1);
 
             // assert
             Assert.NotNull(location);
@@ -27,7 +28,7 @@ namespace StoreApp.Library.Tests
             // arrange
 
             // act
-            static ILocation CreateLocation() => new Location(name: null, "1234 Address", new Dictionary<IProduct, int>(), id: 1);
+            static ILocation CreateLocation() => new Location(name: null, address, new Dictionary<IProduct, int>(), id: 1);
 
             // assert
             Assert.Throws<ArgumentNullException>(CreateLocation);
@@ -51,7 +52,7 @@ namespace StoreApp.Library.Tests
             // arrange
 
             // act
-            static ILocation CreateLocation() => new Location("Location Name", "1234 Address", inventory: null, id: 1);
+            static ILocation CreateLocation() => new Location("Location Name", address, inventory: null, id: 1);
 
             // assert
             Assert.Throws<ArgumentNullException>(CreateLocation);
@@ -63,19 +64,7 @@ namespace StoreApp.Library.Tests
             // arrange
 
             // act
-            static ILocation CreateLocation() => new Location("    ", "1234 Address", new Dictionary<IProduct, int>(), id: 1);
-
-            // assert
-            Assert.Throws<ArgumentException>(CreateLocation);
-        }
-
-        [Fact]
-        public void Location_WhiteSpaceAddress_Fail()
-        {
-            // arrange
-
-            // act
-            static ILocation CreateLocation() => new Location("Location Name", "   ", new Dictionary<IProduct, int>(), id: 1);
+            static ILocation CreateLocation() => new Location("    ", address, new Dictionary<IProduct, int>(), id: 1);
 
             // assert
             Assert.Throws<ArgumentException>(CreateLocation);
@@ -90,7 +79,7 @@ namespace StoreApp.Library.Tests
             int value = idValue;
 
             // act
-            ILocation CreateLocation() => new Location("Location Name", "1234 Address", new Dictionary<IProduct, int>(), id: value);
+            ILocation CreateLocation() => new Location("Location Name", address, new Dictionary<IProduct, int>(), id: value);
 
             // assert
             Assert.Throws<ArgumentException>(CreateLocation);
@@ -100,7 +89,7 @@ namespace StoreApp.Library.Tests
         public void Location_IsProductAvailable_Success()
         {
             // arrange
-            ILocation location = new Location("Location Name", "1234 Address", new Dictionary<IProduct, int>() { { apple, 3 } }, id: 1);
+            ILocation location = new Location("Location Name", address, new Dictionary<IProduct, int>() { { apple, 3 } }, id: 1);
 
             // act
             bool isAvailable = location.IsProductAvailable(apple, 3);
@@ -113,7 +102,7 @@ namespace StoreApp.Library.Tests
         public void Location_IsProductAvailable_TooFew_Fail()
         {
             // arrange
-            ILocation location = new Location("Location Name", "1234 Address", new Dictionary<IProduct, int>() { { apple, 3 } }, id: 1);
+            ILocation location = new Location("Location Name", address, new Dictionary<IProduct, int>() { { apple, 3 } }, id: 1);
 
             // act
             bool isAvailable = location.IsProductAvailable(apple, 4);
@@ -126,7 +115,7 @@ namespace StoreApp.Library.Tests
         public void Location_IsProductAvailable_ProductDoesNotExist_Fail()
         {
             // arrange
-            ILocation location = new Location("Location Name", "1234 Address", new Dictionary<IProduct, int>(), id: 1);
+            ILocation location = new Location("Location Name", address, new Dictionary<IProduct, int>(), id: 1);
 
             // act
             bool isAvailable = location.IsProductAvailable(apple, 3);
