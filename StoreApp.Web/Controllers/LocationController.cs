@@ -28,7 +28,7 @@ namespace StoreApp.Web.Controllers
             {
                 Id = l.Id,
                 Name = l.Name,
-                Address = l.Address
+                AddressLines = l.Address.FormatToMultiline()
             });
         }
     }

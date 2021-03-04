@@ -22,7 +22,7 @@ namespace StoreApp.Web.Model
         /// <summary>
         /// The location that the order was placed from.
         /// </summary>
-        public ILocation StoreLocation { get; init; }
+        public ILocationHead Location { get; init; }
 
         /// <summary>
         /// The time the order was proccessed.

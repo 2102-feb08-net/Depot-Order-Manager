@@ -4,20 +4,6 @@ const table = document.getElementById("customerTableBody");
 
 let customerForm = document.getElementById('customerForm');
 customerForm.onsubmit = createCustomer;
-// () => {
-    // fetch("/api/customers/add")
-    //     .then(
-    //         customers => {
-    //             const firstName = document.getElementById("firstName_Input").value;
-    //             const lastName = document.getElementById("lastName_Input").value;
-
-    //             addCustomerRow('?', firstName, lastName);
-    //         },
-    //         Error => {
-    //             alert("Failed to add customer: " + customer.firstName + " " + customer.lastName);
-    //         }
-    //     );
-// };
 
 async function loadCustomers() {
     const response = await fetch("/api/customers/getall");
@@ -52,8 +38,7 @@ async function createCustomer() {
 
     let response = await fetch("/api/customers/add", options);
 
-    if(!response.ok)
-    {
+    if (!response.ok) {
         alert("Failed to add customer: " + customer.firstName + " " + customer.lastName);
     }
 }

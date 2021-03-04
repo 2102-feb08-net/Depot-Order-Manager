@@ -12,7 +12,7 @@ namespace StoreApp.DataAccess.Repository
     /// </summary>
     public class CustomerRepository : ICustomerRepository
     {
-        private DigitalStoreContext _context;
+        private readonly DigitalStoreContext _context;
 
         /// <summary>
         /// Constructs a new Customer Repository using the specified context.
@@ -81,9 +81,6 @@ namespace StoreApp.DataAccess.Repository
         /// Gets all of the customers in the database. This should only be called if you plan on doing additional querying to get a subset of the data.
         /// </summary>
         /// <returns>Returns an IEnumerable with all of the customers in the database.</returns>
-        public async Task<IEnumerable<Library.Model.Customer>> GetAllCustomers()
-        {
-            return await _context.Customers.Select(c => new Library.Model.Customer(c.FirstName, c.LastName, c.Id)).ToListAsync();
-        }
+        public async Task<IEnumerable<Library.Model.Customer>> GetAllCustomers() => await _context.Customers.Select(c => new Library.Model.Customer(c.FirstName, c.LastName, c.Id)).ToListAsync();
     }
 }

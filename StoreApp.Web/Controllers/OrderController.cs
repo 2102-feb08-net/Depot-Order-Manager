@@ -43,19 +43,16 @@ namespace StoreApp.Web.Controllers
         }
 
         [HttpPost("/api/orders/send-order")]
-        public async Task SendOrder(OrderTemplate orderTemplate)
-        {
-            await _orderRepo.SendOrderTransactionAsync(orderTemplate);
-        }
+        public async Task SendOrder(OrderTemplate orderTemplate) => await _orderRepo.SendOrderTransactionAsync(orderTemplate);
 
-        private OrderHead ConvertOrderToOnlyHead(IReadOnlyOrder order)
+        private static OrderHead ConvertOrderToOnlyHead(IReadOnlyOrder order)
         {
             return new OrderHead()
             {
                 Id = order.Id,
                 CustomerId = order.Customer.Id,
                 Customer = order.Customer,
-                StoreLocation = order.StoreLocation,
+                Location = new LocationHead() { Id = order.StoreLocation.Id, Name = order.StoreLocation.Name, AddressLines = order.StoreLocation.Address.FormatToMultiline() },
                 OrderTime = order.OrderTime.HasValue ? order.OrderTime.Value.DateTime.ToString("D") : "No Data",
                 TotalPrice = OrderProcessor.CalculateTotalPrice(order)
             };

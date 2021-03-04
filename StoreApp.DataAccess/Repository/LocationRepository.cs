@@ -12,7 +12,7 @@ namespace StoreApp.DataAccess.Repository
     /// </summary>
     public class LocationRepository : ILocationRepository
     {
-        private DigitalStoreContext _context;
+        private readonly DigitalStoreContext _context;
 
         /// <summary>
         /// Constructs a new Location Repository
@@ -49,7 +49,7 @@ namespace StoreApp.DataAccess.Repository
 
             Library.Model.ILocation location = new Library.Model.Location(
                 name: storeLocation.Name,
-                address: storeLocation.Address.Print(),
+                address: storeLocation.Address.ConvertAddress(),
                 inventory: inventoryDictionary,
                 id: storeLocation.Id
             );
@@ -61,7 +61,7 @@ namespace StoreApp.DataAccess.Repository
         {
             return await _context.StoreLocations.Select(l => new Library.Model.Location(
                 l.Name,
-                l.Address.Print(),
+                l.Address.ConvertAddress(),
                 new Dictionary<Library.Model.IProduct, int>(),
                 l.Id
             )).ToListAsync();

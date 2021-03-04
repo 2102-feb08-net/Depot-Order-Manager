@@ -17,9 +17,9 @@ namespace StoreApp.Library.Model
         string Name { get; }
 
         /// <summary>
-        /// The formatted address of the location
+        /// The address of the location
         /// </summary>
-        string Address { get; }
+        IAddress Address { get; }
 
         /// <summary>
         /// The ID of the location

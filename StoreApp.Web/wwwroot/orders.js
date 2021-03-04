@@ -16,7 +16,7 @@ async function loadOrders() {
     const orders = await response.json();
 
     for (const order of orders) {
-        addOrderRow(order.id, order.orderTime, order.customer, order.storeLocation.name, order.totalPrice);
+        addOrderRow(order.id, order.orderTime, order.customer, order.location.name, order.totalPrice);
     }
 }
 
@@ -25,15 +25,41 @@ async function showOrderDetails(orderId) {
 
     let details = await response.json();
 
+    clearOrderLines(productTable);
+
     for (const line of details.lines)
         addOrderLineRow(productTable, line.product, line.quantity, line.lineTotalPrice);
 
     updateTotalRow(productTable, details.orderTotalPrice);
 
-    document.getElementById("orderIdTitle").innerHTML = details.Head.id;
+    buildAddress(details.head.location.name, details.head.location.addressLines);
 
-    document.getElementById("orderTableContainer").hidden = true;
-    document.getElementById("orderDetailsContainer").hidden = false;
+    document.getElementById("customerName").innerHTML = details.head.customer.firstName + " " + details.head.customer.lastName;
+    document.getElementById("orderTime").innerHTML = details.head.orderTime;
+
+    document.getElementById("orderIdTitle").innerHTML = details.head.id;
+
+    setDetailsVisibility(true);
+}
+
+function buildAddress(name, addressLines) {
+    const NUMBER_OF_ADDRESS_LINES = 4;
+    document.getElementById("locationName").innerHTML = name;
+    for (let i = 0; i < NUMBER_OF_ADDRESS_LINES; i++) {
+        document.getElementById(`addressLine${i}`).innerHTML = i < addressLines.length ? addressLines[i] : "";
+    }
+}
+
+function setDetailsVisibility(visibility) {
+    document.getElementById("orderTableContainer").hidden = visibility;
+    document.getElementById("orderDetailsContainer").hidden = !visibility;
+}
+
+function clearOrderLines(table) {
+    let numberOfRowsToDelete = table.rows.length - 2;
+
+    for (let i = 0; i < numberOfRowsToDelete; i++)
+        table.deleteRow(0);
 }
 
 function addOrderLineRow(table, product, quantity, linePrice) {
@@ -65,6 +91,7 @@ function updateTotalRow(table, totalPrice) {
 }
 
 function goBackFromDetails() {
+    setDetailsVisibility(false);
 }
 
 function addOrderRow(id, dateTime, customer, storeLocation, totalPrice) {
@@ -85,3 +112,4 @@ function addOrderRow(id, dateTime, customer, storeLocation, totalPrice) {
 }
 
 loadOrders();
+document.getElementById("goBackButton").onclick = goBackFromDetails;

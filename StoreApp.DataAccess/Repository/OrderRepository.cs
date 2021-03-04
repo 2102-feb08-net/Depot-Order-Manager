@@ -14,7 +14,7 @@ namespace StoreApp.DataAccess.Repository
     /// </summary>
     public class OrderRepository : IOrderRepository
     {
-        private DigitalStoreContext _context;
+        private readonly DigitalStoreContext _context;
 
         /// <summary>
         /// Constructs a new Order Repository
@@ -128,9 +128,10 @@ namespace StoreApp.DataAccess.Repository
             foreach (var purchase in purchaseOrders)
             {
                 ICustomer customer = new Library.Model.Customer(purchase.Customer.FirstName, purchase.Customer.LastName, purchase.CustomerId);
+
                 ILocation location = new Location(
                     name: purchase.StoreLocation.Name,
-                    address: purchase.StoreLocation.Address.Print(),
+                    address: purchase.StoreLocation.Address.ConvertAddress(),
                     inventory: new Dictionary<IProduct, int>(),
                     id: purchase.StoreLocation.Id
                 );

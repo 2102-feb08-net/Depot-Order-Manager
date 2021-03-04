@@ -1,5 +1,0 @@
-<footer class="footer mt-auto text-center py-3 bg-light">
-    <div class="container">
-        <span class="text-muted">© 2021 Bryson Ewell</span>
-    </div>
-</footer>

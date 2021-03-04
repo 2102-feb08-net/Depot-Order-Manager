@@ -15,7 +15,7 @@ namespace StoreApp.DataAccess.Repository
     /// </summary>
     public class ProductRepository : IProductRepository
     {
-        private DigitalStoreContext _context;
+        private readonly DigitalStoreContext _context;
 
         /// <summary>
         /// Constructs a new Product Repository
@@ -46,9 +46,6 @@ namespace StoreApp.DataAccess.Repository
         /// Gets all of the products in the database
         /// </summary>
         /// <returns>Returns an IEnumerable of IProducts</returns>
-        public async Task<IEnumerable<IProduct>> GetAllProducts()
-        {
-            return await _context.Products.Select(p => new Library.Model.Product(p.Name, p.Category, p.UnitPrice, p.Id)).ToListAsync();
-        }
+        public async Task<IEnumerable<IProduct>> GetAllProducts() => await _context.Products.Select(p => new Library.Model.Product(p.Name, p.Category, p.UnitPrice, p.Id)).ToListAsync();
     }
 }

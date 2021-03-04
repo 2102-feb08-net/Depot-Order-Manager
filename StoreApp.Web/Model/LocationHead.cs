@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace StoreApp.Web.Model
 {
-    public class LocationHead
+    public class LocationHead : ILocationHead
     {
         /// <summary>
         /// The display name of the location
@@ -15,7 +15,7 @@ namespace StoreApp.Web.Model
         /// <summary>
         /// The formatted address of the location
         /// </summary>
-        public string Address { get; init; }
+        public string[] AddressLines { get; init; }
 
         /// <summary>
         /// The ID of the location

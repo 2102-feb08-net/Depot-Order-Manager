@@ -19,7 +19,7 @@ namespace StoreApp.Library.Model
         /// <summary>
         /// The formatted address of the location
         /// </summary>
-        public string Address { get; }
+        public IAddress Address { get; }
 
         /// <summary>
         /// The ID of the location
@@ -52,7 +52,7 @@ namespace StoreApp.Library.Model
         /// <param name="name">The name of the location.</param>
         /// <param name="address">The address of the location.</param>
         /// <param name="id">The ID of the location.</param>
-        public Location(string name, string address, IDictionary<IProduct, int> inventory, int id)
+        public Location(string name, IAddress address, IDictionary<IProduct, int> inventory, int id)
         {
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
@@ -61,8 +61,7 @@ namespace StoreApp.Library.Model
 
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException(paramName: nameof(name), message: "Location name cannot be null or whitespace.");
-            if (string.IsNullOrWhiteSpace(address))
-                throw new ArgumentException(paramName: nameof(name), message: "Address cannot be null or whitespace.");
+
             if (id <= 0)
                 throw new ArgumentException(paramName: nameof(id), message: "ID must be greater than 0.");
 

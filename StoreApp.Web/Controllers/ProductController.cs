@@ -20,9 +20,6 @@ namespace StoreApp.Web.Controllers
         }
 
         [HttpGet("/api/products/getall")]
-        public async Task<IEnumerable<IProduct>> GetAllProducts()
-        {
-            return await _productRepo.GetAllProducts();
-        }
+        public async Task<IEnumerable<IProduct>> GetAllProducts() => await _productRepo.GetAllProducts();
     }
 }

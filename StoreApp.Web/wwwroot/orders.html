@@ -10,7 +10,34 @@
     <title>Orders</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
-    <div id="nav-placeholder"></div>
+
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top accent-color">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Webstore</a>
+            <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse accent-color" id="navbarCollapse" style="">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="customers.html">Customers</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link active dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Orders
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                            <li><a class="dropdown-item" href="placeorder.html">Place Order</a></li>
+                            <li><a class="dropdown-item" href="orders.html">View Orders</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
     <main>
         <h1 class="page-title">Orders</h1>
@@ -40,12 +67,12 @@
             <table class="table table-striped table-hover product-table">
                 <thead>
                     <tr>
-                        <th onclick="alert('ID');">Product#</th>
-                        <th onclick="alert('First Name');">Product Name</th>
-                        <th onclick="alert('Last Name');">Category</th>
-                        <th onclick="alert('Last Name');">Unit Price</th>
-                        <th onclick="alert('Last Name');">Quantity</th>
-                        <th onclick="alert('Last Name');">Total Price</th>
+                        <th>Product#</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Unit Price</th>
+                        <th>Quantity</th>
+                        <th>Total Price</th>
                     </tr>
                 </thead>
                 <tbody id="productTableBody">
@@ -59,6 +86,26 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm">
+                        <strong id="customerName"></strong>
+                        <p id="orderTime"></p>
+                    </div>
+                    <div class="col-sm">
+                        <strong id="locationName"></strong>
+                        <address>
+                            <span id="addressLine0"></span><br />
+                            <span id="addressLine1"></span><br />
+                            <span id="addressLine2"></span><br />
+                            <span id="addressLine3"></span>
+                        </address>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-around">
+                <button id="goBackButton" class="btn btn-primary">Go Back</button>
+            </div>
         </div>
     </main>
 
