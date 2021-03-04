@@ -37,3 +37,8 @@ steps:
     appType: 'webApp'
     appName: 'bewell-storeapp-revature'
     package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+    appSettings: 
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '5.0.x'
