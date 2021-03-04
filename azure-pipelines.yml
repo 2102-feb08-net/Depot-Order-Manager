@@ -18,7 +18,7 @@ steps:
 - script: dotnet test
   displayName: 'dotnet test $(buildConfiguration)'
 - script: dotnet publish
-  displayName: 'dotnet publish'
+  displayName: 'dotnet publish -o /Publish/'
   
 - task: AzureRmWebAppDeployment@4
   inputs:
