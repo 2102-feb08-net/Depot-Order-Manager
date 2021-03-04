@@ -13,6 +13,10 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '5.0.x'
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
@@ -22,7 +26,14 @@ steps:
   displayName: Test
   inputs:
     command: test
-    arguments: '--configuration $(BuildConfiguration)'
+    arguments: '--configuration $(BuildConfiguration) --collect "xplat code coverage"'
+    publishTestResults: true
+
+- task: PublishCodeCoverageResults@1
+  displayName: Publish code coverage report
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(Agent.TempDirectory)/*/coverage.cobertura.xml'
 - task: DotNetCoreCLI@2
   displayName: Publish
   inputs:
@@ -38,7 +49,3 @@ steps:
     appName: 'bewell-storeapp-revature'
     package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
     appSettings: 
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '5.0.x'
