@@ -11,19 +11,22 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  startupProject: 'StoreApp.Web'
 
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
-- script: dotnet test
+- script: dotnet test --configuration $(buildConfiguration)
   displayName: 'dotnet test $(buildConfiguration)'
-- script: dotnet publish
-  displayName: 'dotnet publish -o /Publish/'
+- script: dotnet publish --configuration $(buildConfiguration)
+  displayName: 'dotnet publish $(buildConfiguration)'
   
+
+
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
     azureSubscription: 'Free Trial(7b0f809c-844b-477f-b985-811ff1bab8fe)'
     appType: 'webApp'
     WebAppName: 'bewell-storeapp-revature'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/$(startupProject)/bin/$(buildConfiguration)/**/publish/*.zip'
