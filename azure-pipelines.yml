@@ -15,3 +15,13 @@ variables:
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
+- script: dotnet test
+  displayName: 'dotnet test $(buildConfiguration)'
+- script: dotnet publish
+  displayName: 'dotnet publish'
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: '7b0f809c-844b-477f-b985-811ff1bab8fe'
+    appName: 'bewell-storeapp-revature'
+    package: $(System.DefaultWorkingDirectory)/**/*.zip   
