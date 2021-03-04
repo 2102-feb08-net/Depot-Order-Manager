@@ -62,58 +62,6 @@ stages:
         PathtoPublish: $(Build.ArtifactsStagingDirectory)/$(Build.BuildId).zip
         ArtifactName: drop
 
-- stage: Deploy_to_dev_environment 
-  displayName: 'Deploy to Dev'
-  dependsOn: Build
-  condition: and(succeeded('Build'), eq(variables['build.sourceBranch'], 'refs/heads/dev'))
-
-  jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    environment: 'development'
-    pool:
-      vmImage: $(vmImageName)
-
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - download: current
-            artifact: drop
-
-          - task: AzureWebApp@1
-            inputs: 
-                azureSubscription: 'dev-service-connection'
-                appName: 'dev-sp-app'
-                appType: webAppLinux
-                package: '$(Pipeline.Workspace)/**/*.zip'
-
-- stage: Deploy_to_staging_environment 
-  displayName: 'Deploy to Staging'
-  dependsOn: Build
-  condition: and(succeeded('Build'), eq(variables['build.sourceBranch'], 'refs/heads/staging'))
-
-  jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    environment: 'staging'
-    pool:
-      vmImage: $(vmImageName)
-
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-           - download: current
-             artifact: drop
-
-           - task: AzureWebApp@1
-             inputs: 
-                azureSubscription: 'Free Trial(7b0f809c-844b-477f-b985-811ff1bab8fe)'
-                appName: 'bewell-storeapp-revature'
-                appType: webApp
-                package: '$(Pipeline.Workspace)/**/*.zip'
-
 - stage: Deploy_to_production_environment 
   displayName: 'Deploy to Production'
   dependsOn: Build
