@@ -21,5 +21,12 @@ namespace StoreApp.DataAccess.Repository
         /// </summary>
         /// <returns></returns>
         Task<List<Location>> GetLocationsAsync();
+
+        /// <summary>
+        /// Searches the database for locations that have their name contain the search query
+        /// </summary>
+        /// <param name="nameQuery">The query to search for in the location names.</param>
+        /// <returns>Returns a list of locations containing the query in their name.</returns>
+        Task<IEnumerable<Location>> SearchLocationsAsync(string nameQuery);
     }
 }

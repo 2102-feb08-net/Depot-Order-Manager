@@ -18,10 +18,10 @@ namespace StoreApp.DataAccess.Repository
         Task<IEnumerable<ICustomer>> LookUpCustomersByNameAsync(string firstName, string lastName);
 
         /// <summary>
-        /// Searches the database for customers that have either their first or last name contain the search query
+        /// Searches the database for customers that have either their first or last name contain the search query.
         /// </summary>
         /// <param name="nameQuery">The query to search for in the customers' full names</param>
-        /// <returns>Returns a list of customers as some customers contain the query</returns>
+        /// <returns>Returns a list of customers whose names contain the query.</returns>
         Task<IEnumerable<ICustomer>> SearchCustomersAsync(string nameQuery);
 
         /// <summary>

@@ -24,7 +24,22 @@ namespace StoreApp.Web.Controllers
         public async Task<IEnumerable<LocationHead>> GetAllLocations()
         {
             var locations = await _locationRepo.GetLocationsAsync();
-            return locations.Select(l => new LocationHead()
+            return locations.OrderBy(l => l.Id).Select(l => new LocationHead()
+            {
+                Id = l.Id,
+                Name = l.Name,
+                AddressLines = l.Address.FormatToMultiline()
+            });
+        }
+
+        [HttpGet("api/locations/search")]
+        public async Task<IEnumerable<LocationHead>> SearchCustomers(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return await GetAllLocations();
+
+            var locations = await _locationRepo.SearchLocationsAsync(query);
+            return locations.OrderBy(l => l.Id).Select(l => new LocationHead()
             {
                 Id = l.Id,
                 Name = l.Name,

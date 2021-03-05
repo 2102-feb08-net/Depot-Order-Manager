@@ -46,7 +46,7 @@ namespace StoreApp.DataAccess.Repository
             if (string.IsNullOrWhiteSpace(nameQuery))
                 throw new ArgumentException("Search query cannot be empty or null");
 
-            var customers = await _context.Customers.Where(c => c.FirstName.Contains(nameQuery) || (!string.IsNullOrWhiteSpace(c.LastName) && c.LastName.Contains(nameQuery))).ToListAsync();
+            var customers = await _context.Customers.Where(c => c.FirstName.ToLower().Contains(nameQuery.ToLower()) || (!string.IsNullOrWhiteSpace(c.LastName) && c.LastName.ToLower().Contains(nameQuery.ToLower()))).ToListAsync();
             return customers.Select(c => new Library.Model.Customer(c.FirstName, c.LastName, c.Id));
         }
 

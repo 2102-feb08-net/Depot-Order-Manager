@@ -66,5 +66,15 @@ namespace StoreApp.DataAccess.Repository
                 l.Id
             )).ToListAsync();
         }
+
+        public async Task<IEnumerable<Library.Model.Location>> SearchLocationsAsync(string query)
+        {
+            return await _context.StoreLocations.Where(l => l.Name.ToLower().Contains(query.ToLower())).Select(l => new Library.Model.Location(
+                l.Name,
+                l.Address.ConvertAddress(),
+                new Dictionary<Library.Model.IProduct, int>(),
+                l.Id
+            )).ToListAsync();
+        }
     }
 }

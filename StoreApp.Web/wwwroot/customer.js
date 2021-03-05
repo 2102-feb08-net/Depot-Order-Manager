@@ -3,7 +3,7 @@
 const table = document.getElementById("customerTableBody");
 
 function buildCustomerTable(customers) {
-    for (let i = table.rows.length-1; i >= 0; i--)
+    for (let i = table.rows.length - 1; i >= 0; i--)
         table.deleteRow(0);
 
     for (const customer of customers) {
@@ -24,6 +24,7 @@ async function loadCustomers() {
     const customers = await response.json();
 
     buildCustomerTable(customers);
+    showSearchResultTitle(false, "");
 }
 
 async function createCustomer() {
@@ -56,10 +57,19 @@ function addCustomerRow(id, firstName, lastName) {
     idCell.innerHTML = id;
     firstNameCell.innerHTML = firstName;
     lastNameCell.innerHTML = lastName;
+
+    row.setAttribute("data-customer", id);
+    row.addEventListener('click', () => showCustomerOrders(id));
 }
 
 async function searchCustomers() {
     const query = document.getElementById("searchQuery_Input").value;
+
+    if (!query) {
+        loadCustomers();
+        return;
+    }
+
     const response = await fetch(`/api/customers/search?query=${query}`);
 
     if (!response.ok) {
@@ -69,6 +79,18 @@ async function searchCustomers() {
     const customers = await response.json();
 
     buildCustomerTable(customers);
+
+    showSearchResultTitle(true, query);
+}
+
+function showSearchResultTitle(enabled, searchQuery) {
+    document.getElementById("searchTitle_Value").innerHTML = searchQuery;
+    document.getElementById("mainTitle").hidden = enabled;
+    document.getElementById("searchTitle").hidden = !enabled;
+}
+
+function showCustomerOrders(id) {
+    window.location = "orders.html?customer=" + id;
 }
 
 let customerForm = document.getElementById('customerForm');

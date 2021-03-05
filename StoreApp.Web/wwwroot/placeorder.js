@@ -124,7 +124,9 @@ class Product {
     }
 }
 
-async function submitOrder() {
+async function submitOrder(event) {
+    event.preventDefault();
+
     const order = {
         customerId: document.getElementById("customerSelect").value,
         storeLocationId: document.getElementById("locationSelect").value,
@@ -134,6 +136,7 @@ async function submitOrder() {
     const options = {
         method: "POST",
         body: JSON.stringify(order),
+        redirect: 'follow',
         headers: {
             'Content-Type': 'application/json'
         }
@@ -148,6 +151,4 @@ async function submitOrder() {
     alert(response.status);
 }
 
-orderForm.onsubmit = () => {
-    submitOrder();
-};
+orderForm.addEventListener('submit', submitOrder);
