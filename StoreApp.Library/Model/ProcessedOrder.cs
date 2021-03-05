@@ -37,6 +37,11 @@ namespace StoreApp.Library.Model
         public int? Id { get; }
 
         /// <summary>
+        /// The total price for the order.
+        /// </summary>
+        public decimal TotalPrice { get; }
+
+        /// <summary>
         /// Constructs a new Processed Order.
         /// </summary>
         /// <param name="customer">The customer in the order</param>
@@ -44,13 +49,16 @@ namespace StoreApp.Library.Model
         /// <param name="productQuantities">The quantites of each product in the order</param>
         /// <param name="orderTime">The date and time of the order</param>
         /// <param name="id">The order number id</param>
-        public ProcessedOrder(ICustomer customer, ILocation storeLocation, IDictionary<IProduct, int> productQuantities, DateTimeOffset orderTime, int id)
+        public ProcessedOrder(ICustomer customer, ILocation storeLocation, IDictionary<IProduct, int> productQuantities, DateTimeOffset orderTime, decimal totalPrice, int id)
         {
             if (orderTime > DateTime.Now)
                 throw new ArgumentException(paramName: nameof(orderTime), message: "Order time cannot be in the future.");
 
             if (orderTime == default)
                 throw new ArgumentException(paramName: nameof(orderTime), message: "Order time must be set.");
+
+            if (totalPrice < 0)
+                throw new ArgumentException(paramName: nameof(totalPrice), message: "Total price of an order cannot be negative.");
 
             if (id <= 0)
                 throw new ArgumentException(paramName: nameof(id), message: "ID must be greater than 0.");
@@ -59,6 +67,7 @@ namespace StoreApp.Library.Model
             StoreLocation = storeLocation ?? throw new ArgumentNullException(nameof(storeLocation));
             ShoppingCartQuantity = (IReadOnlyDictionary<IProduct, int>)productQuantities ?? throw new ArgumentNullException(nameof(productQuantities));
             OrderTime = orderTime;
+            TotalPrice = totalPrice;
             Id = id;
         }
     }

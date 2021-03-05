@@ -31,13 +31,13 @@ namespace StoreApp.Library
         /// </summary>
         /// <param name="orders">The orders to sort</param>
         /// <returns>Returns the sorted IEnumerable</returns>
-        public static IEnumerable<IReadOnlyOrder> SortByCheapest(this IEnumerable<IReadOnlyOrder> orders) => orders.OrderBy(o => o.CalculateTotalPrice());
+        public static IEnumerable<IReadOnlyOrder> SortByCheapest(this IEnumerable<IReadOnlyOrder> orders) => orders.OrderBy(o => o.TotalPrice);
 
         /// <summary>
         /// Extension method to return an IEnumerable of IReadOnlyOrders sorted by the most expensive total price.
         /// </summary>
         /// <param name="orders">The orders to sort</param>
         /// <returns>Returns the sorted IEnumerable</returns>
-        public static IEnumerable<IReadOnlyOrder> SortByMostExpensive(this IEnumerable<IReadOnlyOrder> orders) => orders.OrderByDescending(o => o.CalculateTotalPrice());
+        public static IEnumerable<IReadOnlyOrder> SortByMostExpensive(this IEnumerable<IReadOnlyOrder> orders) => orders.OrderByDescending(o => o.TotalPrice);
     }
 }

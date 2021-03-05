@@ -41,6 +41,20 @@ namespace StoreApp.Library.Model
         /// </summary>
         public int? Id => null;
 
+        public decimal TotalPrice => CalculateTotalPrice();
+
+        private decimal CalculateTotalPrice()
+        {
+            decimal total = 0;
+            foreach (var pair in _shoppingCartQuantity)
+            {
+                IProduct saleItem = pair.Key;
+                int quantity = pair.Value;
+                total += saleItem.UnitPrice * quantity;
+            }
+            return total;
+        }
+
         /// <summary>
         /// Constructs a new order with the specified customer and location
         /// </summary>

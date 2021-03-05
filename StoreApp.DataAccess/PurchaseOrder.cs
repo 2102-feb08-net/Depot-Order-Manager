@@ -16,6 +16,7 @@ namespace StoreApp.DataAccess
         public int CustomerId { get; set; }
         public int StoreLocationId { get; set; }
         public DateTimeOffset DateProcessed { get; set; }
+        public decimal OrderTotalPrice { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual StoreLocation StoreLocation { get; set; }

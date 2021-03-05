@@ -42,7 +42,7 @@ namespace StoreApp.DataAccess.Repository
                 CustomerId = order.CustomerId,
                 DateProcessed = DateTime.Now,
                 OrderLines = new List<OrderLine>(),
-                StoreLocationId = order.StoreLocationId
+                StoreLocationId = order.StoreLocationId,
             };
 
             await AddProductsToOrder(order, _context, purchaseOrder);
@@ -81,6 +81,7 @@ namespace StoreApp.DataAccess.Repository
                     PurchaseUnitPrice = inventory.Product.UnitPrice,
                 });
             }
+            purchaseOrder.OrderTotalPrice = purchaseOrder.OrderLines.Sum(l => l.PurchaseUnitPrice * l.Quantity);
         }
 
         /// <summary>
@@ -143,7 +144,7 @@ namespace StoreApp.DataAccess.Repository
                     productQuantities.Add(product, line.Quantity);
                 }
 
-                var order = new ProcessedOrder(customer, location, productQuantities, purchase.DateProcessed, purchase.Id);
+                var order = new ProcessedOrder(customer, location, productQuantities, purchase.DateProcessed, purchase.OrderTotalPrice, purchase.Id);
                 orders.Add(order);
             }
 

@@ -54,7 +54,7 @@ namespace StoreApp.Web.Controllers
                 Customer = order.Customer,
                 Location = new LocationHead() { Id = order.StoreLocation.Id, Name = order.StoreLocation.Name, AddressLines = order.StoreLocation.Address.FormatToMultiline() },
                 OrderTime = order.OrderTime.HasValue ? order.OrderTime.Value.DateTime.ToString("D") : "No Data",
-                TotalPrice = OrderProcessor.CalculateTotalPrice(order)
+                TotalPrice = order.TotalPrice
             };
         }
 

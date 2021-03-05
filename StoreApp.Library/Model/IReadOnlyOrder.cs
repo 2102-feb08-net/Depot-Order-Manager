@@ -35,5 +35,10 @@ namespace StoreApp.Library.Model
         /// The ID of the order.
         /// </summary>
         int? Id { get; }
+
+        /// <summary>
+        /// The total price for the order
+        /// </summary>
+        decimal TotalPrice { get; }
     }
 }

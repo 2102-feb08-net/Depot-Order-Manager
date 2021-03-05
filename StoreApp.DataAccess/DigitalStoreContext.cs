@@ -71,13 +71,13 @@ namespace StoreApp.DataAccess
                     .WithMany(p => p.Inventories)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventory__Produ__5F492382");
+                    .HasConstraintName("FK__Inventory__Produ__3EA749C6");
 
                 entity.HasOne(d => d.Store)
                     .WithMany(p => p.Inventories)
                     .HasForeignKey(d => d.StoreId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventory__Store__603D47BB");
+                    .HasConstraintName("FK__Inventory__Store__3F9B6DFF");
             });
 
             modelBuilder.Entity<OrderLine>(entity =>
@@ -90,20 +90,20 @@ namespace StoreApp.DataAccess
                     .WithMany(p => p.OrderLines)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__OrderLine__Quant__69C6B1F5");
+                    .HasConstraintName("FK__OrderLine__Quant__4A18FC72");
 
                 entity.HasOne(d => d.PurchaseOrder)
                     .WithMany(p => p.OrderLines)
                     .HasForeignKey(d => d.PurchaseOrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__OrderLine__Purch__6ABAD62E");
+                    .HasConstraintName("FK__OrderLine__Purch__4B0D20AB");
             });
 
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.ToTable("Product");
 
-                entity.HasIndex(e => e.Name, "UQ__Product__737584F6D762C7C1")
+                entity.HasIndex(e => e.Name, "UQ__Product__737584F6B5451F35")
                     .IsUnique();
 
                 entity.Property(e => e.Category)
@@ -121,27 +121,29 @@ namespace StoreApp.DataAccess
             {
                 entity.ToTable("PurchaseOrder");
 
+                entity.Property(e => e.OrderTotalPrice).HasColumnType("money");
+
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.PurchaseOrders)
                     .HasForeignKey(d => d.CustomerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PurchaseO__Custo__65F62111");
+                    .HasConstraintName("FK__PurchaseO__Order__46486B8E");
 
                 entity.HasOne(d => d.StoreLocation)
                     .WithMany(p => p.PurchaseOrders)
                     .HasForeignKey(d => d.StoreLocationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PurchaseO__Store__66EA454A");
+                    .HasConstraintName("FK__PurchaseO__Store__473C8FC7");
             });
 
             modelBuilder.Entity<StoreLocation>(entity =>
             {
                 entity.ToTable("StoreLocation");
 
-                entity.HasIndex(e => e.AddressId, "UQ__StoreLoc__091C2AFA9E6285F2")
+                entity.HasIndex(e => e.AddressId, "UQ__StoreLoc__091C2AFA74EAA810")
                     .IsUnique();
 
-                entity.HasIndex(e => e.Name, "UQ__StoreLoc__737584F6F8377478")
+                entity.HasIndex(e => e.Name, "UQ__StoreLoc__737584F66559D563")
                     .IsUnique();
 
                 entity.Property(e => e.Name)
@@ -152,7 +154,7 @@ namespace StoreApp.DataAccess
                     .WithOne(p => p.StoreLocation)
                     .HasForeignKey<StoreLocation>(d => d.AddressId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__StoreLoca__Addre__5C6CB6D7");
+                    .HasConstraintName("FK__StoreLoca__Addre__3BCADD1B");
             });
 
             OnModelCreatingPartial(modelBuilder);
