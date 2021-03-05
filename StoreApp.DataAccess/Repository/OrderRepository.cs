@@ -181,5 +181,25 @@ namespace StoreApp.DataAccess.Repository
                  .Where(o => o.Id == orderId).ToListAsync();
             return ConvertPurchaseOrderToIOrders(orders).FirstOrDefault();
         }
+
+        public async Task<IEnumerable<IReadOnlyOrder>> SearchOrdersAsync(ISearchParams searchParams)
+        {
+            IQueryable<PurchaseOrder> orders = _context.PurchaseOrders
+                 .Include(p => p.Customer)
+                 .Include(p => p.OrderLines)
+                 .ThenInclude(o => o.Product)
+                 .Include(p => p.StoreLocation)
+                 .ThenInclude(s => s.Address);
+
+            if (searchParams.CustomerId.HasValue)
+                orders = orders.Where(o => o.CustomerId == searchParams.CustomerId);
+
+            if (searchParams.LocationId.HasValue)
+                orders = orders.Where(o => o.StoreLocationId == searchParams.LocationId);
+
+            var purchaseOrders = await orders.ToListAsync();
+
+            return ConvertPurchaseOrderToIOrders(purchaseOrders);
+        }
     }
 }

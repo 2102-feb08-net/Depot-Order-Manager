@@ -3,13 +3,21 @@
 const orderTable = document.getElementById("orderTableBody");
 const productTable = document.getElementById("productTableBody");
 
-async function loadOrders() {
-    const response = await fetch("/api/orders/getall");
+const emptyTableDesc = document.getElementById("emptyTableDesc");
+const loadingTableDesc = document.getElementById("loadingTableDesc");
+const errorTableDesc = document.getElementById("failedToLoadTableDesc");
 
-    document.getElementById("loadingTable").hidden = true;
+async function loadOrders(fetchUrl) {
+    emptyTableDesc.hidden = true;
+    errorTableDesc.hidden = true;
+    loadingTableDesc.hidden = false;
+
+    const response = await fetch(fetchUrl);
+
+    loadingTableDesc.hidden = true;
 
     if (!response.ok) {
-        document.getElementById("failedToLoadTable").hidden = false;
+        errorTableDesc.hidden = false;
         throw new Error(`Unable to download orders from server: (${response.status}) ${response.statusText}`);
     }
 
@@ -18,6 +26,9 @@ async function loadOrders() {
     for (const order of orders) {
         addOrderRow(order.id, order.orderTime, order.customer, order.location.name, order.totalPrice);
     }
+
+    if (orders.length === 0)
+        emptyTableDesc.hidden = false;
 }
 
 async function showOrderDetails(orderId) {
@@ -111,5 +122,33 @@ function addOrderRow(id, dateTime, customer, storeLocation, totalPrice) {
     row.addEventListener("click", () => showOrderDetails(id));
 }
 
-loadOrders();
+function addParameterToSearchUrl(parameter, urlParams, previousParams) {
+    if (previousParams)
+        previousParams += '&';
+    if (urlParams.has(parameter))
+        return previousParams + `${parameter}=${urlParams.get(parameter)}`;
+    else
+        return previousParams;
+}
+
+function processSearchParameters() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    if (urlParams.has(`customer`) || urlParams.has(`location`)) {
+        let url = "/api/orders/search?";
+        let params = "";
+        params = addParameterToSearchUrl('customer', urlParams, params);
+        params = addParameterToSearchUrl('location', urlParams, params);
+
+        loadOrders(url + params);
+        showSearchResultTitle(true);
+    }
+    else {
+        loadOrders("/api/orders/getall");
+    }
+}
+
 document.getElementById("goBackButton").onclick = goBackFromDetails;
+
+processSearchParameters();

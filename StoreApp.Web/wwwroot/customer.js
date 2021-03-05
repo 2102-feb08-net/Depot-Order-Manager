@@ -2,9 +2,9 @@
 
 const table = document.getElementById("customerTableBody");
 
-function buildCustomerTable(customers) {
-    for (let i = table.rows.length - 1; i >= 0; i--)
-        table.deleteRow(0);
+function buildCustomerTable(tableToBuild, customers) {
+    for (let i = tableToBuild.rows.length - 1; i >= 0; i--)
+        tableToBuild.deleteRow(0);
 
     for (const customer of customers) {
         addCustomerRow(customer.id, customer.firstName, customer.lastName);
@@ -23,11 +23,13 @@ async function loadCustomers() {
 
     const customers = await response.json();
 
-    buildCustomerTable(customers);
+    buildCustomerTable(table, customers);
     showSearchResultTitle(false, "");
 }
 
-async function createCustomer() {
+async function createCustomer(event) {
+    event.preventDefault();
+
     const customer = {
         firstName: document.getElementById("firstName_Input").value,
         lastName: document.getElementById("lastName_Input").value,
@@ -46,6 +48,9 @@ async function createCustomer() {
     if (!response.ok) {
         alert("Failed to add customer: " + customer.firstName + " " + customer.lastName);
     }
+
+    alert(`Successfully added ${customer.firstName} ${customer.lastName}`);
+    window.location.reload(false);
 }
 
 function addCustomerRow(id, firstName, lastName) {
@@ -78,15 +83,9 @@ async function searchCustomers() {
 
     const customers = await response.json();
 
-    buildCustomerTable(customers);
+    buildCustomerTable(table, customers);
 
     showSearchResultTitle(true, query);
-}
-
-function showSearchResultTitle(enabled, searchQuery) {
-    document.getElementById("searchTitle_Value").innerHTML = searchQuery;
-    document.getElementById("mainTitle").hidden = enabled;
-    document.getElementById("searchTitle").hidden = !enabled;
 }
 
 function showCustomerOrders(id) {
@@ -96,7 +95,7 @@ function showCustomerOrders(id) {
 let customerForm = document.getElementById('customerForm');
 customerForm.onsubmit = createCustomer;
 
-let customerSearch = document.getElementById("searchCustomerButton");
+let customerSearch = document.getElementById("searchButton");
 customerSearch.onclick = searchCustomers;
 
 loadCustomers();

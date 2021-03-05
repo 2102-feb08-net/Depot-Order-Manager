@@ -3,7 +3,6 @@
 const table = document.getElementById("tableBody");
 
 function buildTable(table, locations) {
-
     for (let i = table.rows.length - 1; i >= 0; i--)
         table.deleteRow(0);
 
@@ -68,12 +67,6 @@ async function searchTable() {
     buildTable(table, locations);
 
     showSearchResultTitle(true, query);
-}
-
-function showSearchResultTitle(enabled, searchQuery) {
-    document.getElementById("searchTitle_Value").innerHTML = searchQuery;
-    document.getElementById("mainTitle").hidden = enabled;
-    document.getElementById("searchTitle").hidden = !enabled;
 }
 
 function showLocationOrders(id) {

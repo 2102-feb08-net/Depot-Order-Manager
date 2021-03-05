@@ -1,7 +1,7 @@
 'use strict';
 
-// Simple function found from StackOverflow to truncate the decimal places.
+// Regex function to convert the number value to a string of a specified number of digits.
 function truncateToDecimals(num, dec = 2) {
-    const calcDec = Math.pow(10, dec);
-    return Math.trunc(num * calcDec) / calcDec;
+    var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (dec || -1) + '})?');
+    return num.toString().match(re)[0];
 }

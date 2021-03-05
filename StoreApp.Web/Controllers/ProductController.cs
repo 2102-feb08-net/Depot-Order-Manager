@@ -19,6 +19,10 @@ namespace StoreApp.Web.Controllers
             _productRepo = productRepo;
         }
 
+        /// <summary>
+        /// Gets an enumerable of all of the products in the database.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("/api/products/getall")]
         public async Task<IEnumerable<IProduct>> GetAllProducts() => await _productRepo.GetAllProducts();
     }

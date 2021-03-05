@@ -45,5 +45,7 @@ namespace StoreApp.Library
         /// <param name="orderId">The Id of the order.</param>
         /// <returns>Returns the order with its information.</returns>
         Task<IReadOnlyOrder> GetOrderAsync(int orderId);
+
+        Task<IEnumerable<IReadOnlyOrder>> SearchOrdersAsync(ISearchParams searchParams);
     }
 }

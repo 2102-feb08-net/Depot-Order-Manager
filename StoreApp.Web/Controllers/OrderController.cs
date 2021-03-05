@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using StoreApp.Library.Model;
 using StoreApp.Web.Model;
 using StoreApp.Library;
+using System.ComponentModel.DataAnnotations;
 
 namespace StoreApp.Web.Controllers
 {
@@ -42,8 +43,16 @@ namespace StoreApp.Web.Controllers
             };
         }
 
+        [HttpGet("/api/orders/search")]
+        public async Task<IEnumerable<OrderHead>> SearchOrders(int? customer, int? location)
+        {
+            ISearchParams searchParams = new SearchParams() { CustomerId = customer, LocationId = location };
+            var orders = await _orderRepo.SearchOrdersAsync(searchParams);
+            return orders.Select(o => ConvertOrderToOnlyHead(o));
+        }
+
         [HttpPost("/api/orders/send-order")]
-        public async Task SendOrder(OrderTemplate orderTemplate) => await _orderRepo.SendOrderTransactionAsync(orderTemplate);
+        public async Task SendOrder([Required] OrderTemplate orderTemplate) => await _orderRepo.SendOrderTransactionAsync(orderTemplate);
 
         private static OrderHead ConvertOrderToOnlyHead(IReadOnlyOrder order)
         {

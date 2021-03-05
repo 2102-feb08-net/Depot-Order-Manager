@@ -124,6 +124,11 @@ class Product {
 async function submitOrder(event) {
     event.preventDefault();
 
+    if (productCart.length === 0) {
+        alert("You need at least one product in the cart to submit an order.");
+        return;
+    }
+
     const order = {
         customerId: document.getElementById("customerSelect").value,
         storeLocationId: document.getElementById("locationSelect").value,
@@ -142,10 +147,13 @@ async function submitOrder(event) {
     let response = await fetch("/api/orders/send-order", options);
 
     if (!response.ok) {
-        alert("Failed to submit order: " + response.message);
+        alert("Failed to submit order");
+        return
     }
 
-    alert(response.status);
+    alert("Order submitted sucessfully!");
+
+    window.location.reload(false);
 }
 
 orderForm.addEventListener('submit', submitOrder);
