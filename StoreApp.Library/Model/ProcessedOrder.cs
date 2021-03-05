@@ -52,16 +52,16 @@ namespace StoreApp.Library.Model
         public ProcessedOrder(ICustomer customer, ILocation storeLocation, IDictionary<IProduct, int> productQuantities, DateTimeOffset orderTime, decimal totalPrice, int id)
         {
             if (orderTime > DateTime.Now)
-                throw new ArgumentException(paramName: nameof(orderTime), message: "Order time cannot be in the future.");
+                throw new ArgumentException(message: "Order time cannot be in the future.", paramName: nameof(orderTime));
 
             if (orderTime == default)
-                throw new ArgumentException(paramName: nameof(orderTime), message: "Order time must be set.");
+                throw new ArgumentException(message: "Order time must be set.", paramName: nameof(orderTime));
 
             if (totalPrice < 0)
-                throw new ArgumentException(paramName: nameof(totalPrice), message: "Total price of an order cannot be negative.");
+                throw new ArgumentException(message: "Total price of an order cannot be negative.", paramName: nameof(totalPrice));
 
             if (id <= 0)
-                throw new ArgumentException(paramName: nameof(id), message: "ID must be greater than 0.");
+                throw new ArgumentException(message: "ID must be greater than 0.", paramName: nameof(id));
 
             Customer = customer ?? throw new ArgumentNullException(nameof(customer));
             StoreLocation = storeLocation ?? throw new ArgumentNullException(nameof(storeLocation));

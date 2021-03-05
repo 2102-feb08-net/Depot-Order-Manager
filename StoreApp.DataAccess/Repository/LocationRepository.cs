@@ -67,9 +67,9 @@ namespace StoreApp.DataAccess.Repository
             )).ToListAsync();
         }
 
-        public async Task<IEnumerable<Library.Model.Location>> SearchLocationsAsync(string query)
+        public async Task<IEnumerable<Library.Model.Location>> SearchLocationsAsync(string nameQuery)
         {
-            return await _context.StoreLocations.Where(l => l.Name.ToLower().Contains(query.ToLower())).Select(l => new Library.Model.Location(
+            return await _context.StoreLocations.Where(l => l.Name.ToLower().Contains(nameQuery.ToLower())).Select(l => new Library.Model.Location(
                 l.Name,
                 l.Address.ConvertAddress(),
                 new Dictionary<Library.Model.IProduct, int>(),

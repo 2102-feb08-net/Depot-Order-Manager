@@ -38,7 +38,6 @@ namespace StoreApp.DataAccess.Repository
 
             PurchaseOrder purchaseOrder = new PurchaseOrder()
             {
-                // TODO: Replace with proper authentication and unique identification using a Login System
                 CustomerId = order.CustomerId,
                 DateProcessed = DateTime.Now,
                 OrderLines = new List<OrderLine>(),
@@ -63,7 +62,7 @@ namespace StoreApp.DataAccess.Repository
                 if (orderLine.Quantity <= 0)
                     throw new OrderException("Cannot order products with a quantity less than or equal to 0.");
 
-                var inventory = inventories.Where(i => i.ProductId == orderLine.ProductId).FirstOrDefault();
+                var inventory = inventories.FirstOrDefault(i => i.ProductId == orderLine.ProductId);
 
                 if (inventory is null)
                     throw new OrderException($"Store location does not contain the product ID '{orderLine.ProductId}' in its inventory.");

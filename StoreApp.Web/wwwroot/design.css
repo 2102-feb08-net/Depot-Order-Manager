@@ -22,9 +22,9 @@
     text-align: center;
 }
 
-.add-customer label {
-    padding: 0.5em;
-}
+    .add-customer label {
+        padding: 0.5em;
+    }
 
 .customer-table thead {
     background: var(--accent-color);
@@ -37,10 +37,10 @@
     margin-right: 5em;
 }
 
-.order-form * {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-}
+    .order-form * {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+    }
 
 .product-table {
     margin-left: auto;
@@ -52,15 +52,11 @@
     border: 2px solid black
 }
 
-.product-table thead {
-    background: var(--accent-color);
-    color: #fff;
-}
+    .product-table thead {
+        background: var(--accent-color);
+        color: #fff;
+    }
 
-text-center {
+.text-center {
     text-align: center;
-}
-
-flex-wrapper {
-    flex-wrap: wrap;
 }
