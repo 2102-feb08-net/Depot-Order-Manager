@@ -17,11 +17,34 @@ steps:
   inputs:
     packageType: 'sdk'
     version: '5.0.x'
+
+- task: UseDotNet@2
+  inputs:
+    packageType: 'runtime'
+    version: '2.x'
+
+- task: SonarCloudPrepare@1
+  displayName: Sonar Cloud Preparation
+  inputs:
+    SonarCloud: 'Sonar Cloud'
+    organization: '2102-feb08-net'
+    scannerMode: 'MSBuild'
+    projectKey: '2102-feb08-net_bryson-project1'
+    projectName: 'WebStore_Project1'
+
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
     command: 'build'
     arguments: --output $(System.DefaultWorkingDirectory)/publish_output --configuration $(buildConfiguration)
+
+- task: SonarCloudAnalyze@1
+  displayName: Sonar Cloud Analysis
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
+
 - task: DotNetCoreCLI@2
   displayName: Test
   inputs:
