@@ -45,7 +45,7 @@
         <h1 id="mainTitle" class="page-title">Customers</h1>
         <h1 id="searchTitle" class="page-title" hidden>Customer Search results for "<span id="searchTitle_Value"></span>"</h1>
         <div class="container">
-            <table class="table table-striped table-hover customer-table">
+            <table class="table table-striped table-hover customer-table" aria-label="Customer Table">
                 <thead>
                     <tr>
                         <th scope="col">ID#</th>
@@ -70,22 +70,23 @@
         </div>
         <br />
         <br />
-        <center>
-            <form id="customerForm" class="col-3">
+        <div class="row justify-content-center">
+            <form id="customerForm" class="col-10 col-md-3">
                 <div class="form-group">
-                    <label for="firstName">First Name:</label>
+                    <label class="form-label" for="firstName">First Name:</label>
                     <input id="firstName_Input" type="text" placeholder="First Name" class="form-control" name="firstName">
                 </div>
+                <br />
                 <div class="form-group">
-                    <label for="lastName">Last Name:</label>
+                    <label class="form-label" for="lastName">Last Name:</label>
                     <input id="lastName_Input" type="text" placeholder="Last Name" class="form-control" name="lastName">
                 </div>
                 <br />
-                <center>
+                <div class="text-center">
                     <button id="submitAddCustomer" type="submit" name="addCustomerSubmit" class="btn btn-primary accent-color">Add Customer</button>
-                </center>
+                </div>
             </form>
-        </center>
+        </div>
         <br />
     </main>
 
