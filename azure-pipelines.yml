@@ -39,19 +39,19 @@ steps:
     command: 'build'
     arguments: --output $(System.DefaultWorkingDirectory)/publish_output --configuration $(buildConfiguration)
 
-- task: SonarCloudAnalyze@1
-  displayName: Sonar Cloud Analysis
-
-- task: SonarCloudPublish@1
-  inputs:
-    pollingTimeoutSec: '300'
-
 - task: DotNetCoreCLI@2
   displayName: Test
   inputs:
     command: test
     arguments: '--configuration $(buildConfiguration) --collect "xplat code coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura,opencover'
     publishTestResults: true
+
+- task: SonarCloudAnalyze@1
+  displayName: Sonar Cloud Analysis
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
 
 - task: PublishCodeCoverageResults@1
   displayName: Publish code coverage report
