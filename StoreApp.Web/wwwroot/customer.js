@@ -2,8 +2,14 @@
 
 const table = document.getElementById("customerTableBody");
 
-let customerForm = document.getElementById('customerForm');
-customerForm.onsubmit = createCustomer;
+function buildCustomerTable(customers) {
+    for (let i = table.rows.length-1; i >= 0; i--)
+        table.deleteRow(0);
+
+    for (const customer of customers) {
+        addCustomerRow(customer.id, customer.firstName, customer.lastName);
+    }
+}
 
 async function loadCustomers() {
     const response = await fetch("/api/customers/getall");
@@ -17,9 +23,7 @@ async function loadCustomers() {
 
     const customers = await response.json();
 
-    for (const customer of customers) {
-        addCustomerRow(customer.id, customer.firstName, customer.lastName);
-    }
+    buildCustomerTable(customers);
 }
 
 async function createCustomer() {
@@ -53,5 +57,24 @@ function addCustomerRow(id, firstName, lastName) {
     firstNameCell.innerHTML = firstName;
     lastNameCell.innerHTML = lastName;
 }
+
+async function searchCustomers() {
+    const query = document.getElementById("searchQuery_Input").value;
+    const response = await fetch(`/api/customers/search?query=${query}`);
+
+    if (!response.ok) {
+        throw new Error("Unable to search for customers");
+    }
+
+    const customers = await response.json();
+
+    buildCustomerTable(customers);
+}
+
+let customerForm = document.getElementById('customerForm');
+customerForm.onsubmit = createCustomer;
+
+let customerSearch = document.getElementById("searchCustomerButton");
+customerSearch.onclick = searchCustomers;
 
 loadCustomers();

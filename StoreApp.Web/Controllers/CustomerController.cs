@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using StoreApp.Library.Model;
 using StoreApp.DataAccess.Repository;
+using StoreApp.Web.Model;
 
 namespace StoreApp.Web.Controllers
 {
@@ -22,10 +23,20 @@ namespace StoreApp.Web.Controllers
         }
 
         [HttpGet("api/customers/getall")]
-        public async Task<IEnumerable<Customer>> GetCustomers()
+        public async Task<IEnumerable<CustomerData>> GetAllCustomers()
         {
             var customers = await _customerRepo.GetAllCustomers();
-            return customers.OrderBy(c => c.Id).Take(PAGE_SIZE);
+            return customers.OrderBy(c => c.Id).Take(PAGE_SIZE).Select(c => new CustomerData(c));
+        }
+
+        [HttpGet("api/customers/search")]
+        public async Task<IEnumerable<CustomerData>> SearchCustomers(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return await GetAllCustomers();
+
+            var customers = await _customerRepo.SearchCustomersAsync(query);
+            return customers.OrderBy(c => c.Id).Take(PAGE_SIZE).Select(c => new CustomerData(c));
         }
 
         [HttpPost("api/customers/add")]

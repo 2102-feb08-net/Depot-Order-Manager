@@ -28,12 +28,12 @@ namespace StoreApp.DataAccess.Repository
         /// <param name="firstName">The first name of the customer</param>
         /// <param name="lastName">The last name of the customer</param>
         /// <returns>Returns a list of customers as some customers may have the same name</returns>
-        public async Task<List<Library.Model.Customer>> LookUpCustomersByNameAsync(string firstName, string lastName)
+        public async Task<IEnumerable<Library.Model.ICustomer>> LookUpCustomersByNameAsync(string firstName, string lastName)
         {
             var query = GetCustomersFromName(_context, firstName, lastName);
 
             var customers = await query.ToListAsync();
-            return customers.Select(c => new Library.Model.Customer(c.FirstName, c.LastName, c.Id)).ToList();
+            return customers.Select(c => new Library.Model.Customer(c.FirstName, c.LastName, c.Id));
         }
 
         /// <summary>
@@ -41,13 +41,13 @@ namespace StoreApp.DataAccess.Repository
         /// </summary>
         /// <param name="nameQuery">The query to search for in the customers' full names</param>
         /// <returns>Returns a list of customers as some customers contain the query</returns>
-        public async Task<List<Library.Model.ICustomer>> SearchCustomersAsync(string nameQuery)
+        public async Task<IEnumerable<Library.Model.ICustomer>> SearchCustomersAsync(string nameQuery)
         {
             if (string.IsNullOrWhiteSpace(nameQuery))
                 throw new ArgumentException("Search query cannot be empty or null");
 
             var customers = await _context.Customers.Where(c => c.FirstName.Contains(nameQuery) || (!string.IsNullOrWhiteSpace(c.LastName) && c.LastName.Contains(nameQuery))).ToListAsync();
-            return customers.Select(c => (Library.Model.ICustomer)new Library.Model.Customer(c.FirstName, c.LastName, c.Id)).ToList();
+            return customers.Select(c => new Library.Model.Customer(c.FirstName, c.LastName, c.Id));
         }
 
         /// <summary>
