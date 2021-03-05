@@ -41,11 +41,16 @@ namespace StoreApp.DataAccess.Repository
         /// </summary>
         /// <param name="nameQuery">The query to search for in the customers' full names</param>
         /// <returns>Returns a list of customers as some customers contain the query</returns>
-        public async Task<IEnumerable<Library.Model.ICustomer>> SearchCustomersAsync(string nameQuery)
+        public Task<IEnumerable<Library.Model.ICustomer>> SearchCustomersAsync(string nameQuery)
         {
             if (string.IsNullOrWhiteSpace(nameQuery))
                 throw new ArgumentException("Search query cannot be empty or null");
 
+            return SearchCustomersInternalAsync(nameQuery);
+        }
+
+        private async Task<IEnumerable<Library.Model.ICustomer>> SearchCustomersInternalAsync(string nameQuery)
+        {
             var customers = await _context.Customers.Where(c => c.FirstName.ToLower().Contains(nameQuery.ToLower()) || (!string.IsNullOrWhiteSpace(c.LastName) && c.LastName.ToLower().Contains(nameQuery.ToLower()))).ToListAsync();
             return customers.Select(c => new Library.Model.Customer(c.FirstName, c.LastName, c.Id));
         }

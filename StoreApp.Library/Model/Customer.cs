@@ -21,7 +21,7 @@ namespace StoreApp.Library.Model
         public Customer(string firstName, string lastName, int id) : base(firstName, lastName)
         {
             if (id <= 0)
-                throw new ArgumentException("ID must be greater than or equal to 1.");
+                throw new ArgumentException("ID must be greater than or equal to 1.", paramName: nameof(id));
 
             Id = id;
         }

@@ -60,10 +60,10 @@ namespace StoreApp.Library.Model
                 throw new ArgumentNullException(nameof(address));
 
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException(paramName: nameof(name), message: "Location name cannot be null or whitespace.");
+                throw new ArgumentException(message: "Location name cannot be null or whitespace.", paramName: nameof(name));
 
             if (id <= 0)
-                throw new ArgumentException(paramName: nameof(id), message: "ID must be greater than 0.");
+                throw new ArgumentException(message: "ID must be greater than 0.", paramName: nameof(id));
 
             Name = name;
             Address = address;

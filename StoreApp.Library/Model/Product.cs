@@ -45,16 +45,16 @@ namespace StoreApp.Library.Model
                 throw new ArgumentNullException(paramName: nameof(category), message: "Product category cannot be null.");
 
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException(paramName: nameof(name), message: "Product name cannot be empty or whitespace.");
+                throw new ArgumentException(message: "Product name cannot be empty or whitespace.", paramName: nameof(name));
 
             if (string.IsNullOrWhiteSpace(category))
-                throw new ArgumentException(paramName: nameof(category), message: "Product category cannot be empty or whitespace.");
+                throw new ArgumentException(message: "Product category cannot be empty or whitespace.", paramName: nameof(category));
 
             if (unitPrice < 0)
-                throw new ArgumentException(paramName: nameof(unitPrice), message: "The price cannot be negative.");
+                throw new ArgumentException(message: "The price cannot be negative.", paramName: nameof(unitPrice));
 
             if (id <= 0)
-                throw new ArgumentException(paramName: nameof(id), message: "The Product ID must be greater than 0.");
+                throw new ArgumentException(message: "The Product ID must be greater than 0.", paramName: nameof(id));
 
             Name = name;
 

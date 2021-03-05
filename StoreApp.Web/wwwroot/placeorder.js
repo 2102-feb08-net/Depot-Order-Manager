@@ -45,9 +45,6 @@ async function loadProducts() {
     }
 }
 
-async function loadAll(url, typeName, selectElementId, displayName, value) {
-}
-
 function addToSelect(selectElementId, displayName, value) {
     document.getElementById(selectElementId).options.add(new Option(displayName, value));
 }
@@ -71,8 +68,8 @@ function addProductRow(id, name, category, unitPrice, quantity) {
     totalPriceCell.innerHTML = "$" + (price * quantity);
 }
 
-function updateTotalRow(table) {
-    const lastRow = table.rows[table.rows.length - 1];
+function updateTotalRow(tableToUpdate) {
+    const lastRow = tableToUpdate.rows[tableToUpdate.rows.length - 1];
     const totalPriceCell = lastRow.cells[lastRow.cells.length - 1];
 
     let total = 0;

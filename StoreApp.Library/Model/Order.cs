@@ -72,15 +72,15 @@ namespace StoreApp.Library.Model
         /// <param name="product">The product to order.</param>
         /// <param name="quantity">The quantity to order.</param>
         /// <returns>Returns an AttemptResult with a message if the order failed. Can be treated like a bool.</returns>
-        public AttemptResult TryAddProductToOrder(IProduct product, int quantity = 1)
+        public AttemptResult TryAddProductToOrder(IProduct product, int quantity)
         {
             if (quantity < MIN_QUANTITY_PER_ORDER)
                 return AttemptResult.Fail("Quantity must be an integer greater than or equal to 1 for an order.");
 
             int totalProductQuantity = quantity;
 
-            bool existsInCart;
-            if (existsInCart = _shoppingCartQuantity.ContainsKey(product))
+            bool existsInCart = _shoppingCartQuantity.ContainsKey(product);
+            if (existsInCart)
                 totalProductQuantity += _shoppingCartQuantity[product];
 
             if (totalProductQuantity > MAX_QUANTITY_PER_ORDER)

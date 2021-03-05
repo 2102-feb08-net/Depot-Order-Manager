@@ -36,7 +36,7 @@ namespace StoreApp.Library.Model
                 throw new ArgumentNullException(nameof(firstName), message: "A customer must have a first name that is not null.");
 
             if (string.IsNullOrWhiteSpace(firstName))
-                throw new ArgumentException(paramName: nameof(firstName), message: "A customer must have a first name that is not null or empty.");
+                throw new ArgumentException(message: "A customer must have a first name that is not null or empty.", paramName: nameof(firstName));
 
             if (string.IsNullOrWhiteSpace(lastName))
                 lastName = null;
