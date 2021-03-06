@@ -9,11 +9,18 @@ using StoreApp.DataAccess.Repository;
 
 namespace StoreApp.Web.Controllers
 {
+    /// <summary>
+    /// A controller to manage products.
+    /// </summary>
     [ApiController]
     public class ProductController : ControllerBase
     {
         private readonly IProductRepository _productRepo;
 
+        /// <summary>
+        /// Constructs a new ProductController
+        /// </summary>
+        /// <param name="productRepo"></param>
         public ProductController(IProductRepository productRepo)
         {
             _productRepo = productRepo;

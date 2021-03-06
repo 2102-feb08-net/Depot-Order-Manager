@@ -10,16 +10,27 @@ using StoreApp.Web.Model;
 
 namespace StoreApp.Web.Controllers
 {
+    /// <summary>
+    /// A controller to manage customers.
+    /// </summary>
     [ApiController]
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerRepository _customerRepo;
 
+        /// <summary>
+        /// Constructs a new CustomerController
+        /// </summary>
+        /// <param name="customerRepo"></param>
         public CustomerController(ICustomerRepository customerRepo)
         {
             _customerRepo = customerRepo;
         }
 
+        /// <summary>
+        /// Gets all of the customers in the database.
+        /// </summary>
+        /// <returns>Returns an enumerable of all of the customers in the database.</returns>
         [HttpGet("api/customers/getall")]
         public async Task<IEnumerable<CustomerData>> GetAllCustomers()
         {
@@ -27,6 +38,11 @@ namespace StoreApp.Web.Controllers
             return customers.OrderBy(c => c.Id).Select(c => new CustomerData(c));
         }
 
+        /// <summary>
+        /// Searches the database for customers that contain the query in their first or last name.
+        /// </summary>
+        /// <param name="query">Name search query</param>
+        /// <returns>Returns an enumerable of all of the customers with the query in their name.</returns>
         [HttpGet("api/customers/search")]
         public async Task<IEnumerable<CustomerData>> SearchCustomers(string query)
         {

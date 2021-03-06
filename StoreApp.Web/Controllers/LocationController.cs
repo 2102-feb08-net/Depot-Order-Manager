@@ -10,16 +10,27 @@ using StoreApp.Web.Model;
 
 namespace StoreApp.Web.Controllers
 {
+    /// <summary>
+    /// A controller to manage store location information.
+    /// </summary>
     [ApiController]
     public class LocationController : ControllerBase
     {
         private readonly ILocationRepository _locationRepo;
 
+        /// <summary>
+        /// Constructs a new LocationController
+        /// </summary>
+        /// <param name="locationRepo"></param>
         public LocationController(ILocationRepository locationRepo)
         {
             _locationRepo = locationRepo;
         }
 
+        /// <summary>
+        /// Gets all of the store locations in the database.
+        /// </summary>
+        /// <returns>Returns an enumerable of all of the locations.</returns>
         [HttpGet("api/locations/getall")]
         public async Task<IEnumerable<LocationHead>> GetAllLocations()
         {
@@ -32,8 +43,13 @@ namespace StoreApp.Web.Controllers
             });
         }
 
+        /// <summary>
+        /// Searches the database for store locations that contain the query in their name.
+        /// </summary>
+        /// <param name="query">Name search query</param>
+        /// <returns>Returns an enumerable of all of the locations with the query in their name. An empty query returns all locations.</returns>
         [HttpGet("api/locations/search")]
-        public async Task<IEnumerable<LocationHead>> SearchCustomers(string query)
+        public async Task<IEnumerable<LocationHead>> SearchLocations(string query)
         {
             if (string.IsNullOrWhiteSpace(query))
                 return await GetAllLocations();
