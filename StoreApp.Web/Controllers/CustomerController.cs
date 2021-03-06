@@ -15,8 +15,6 @@ namespace StoreApp.Web.Controllers
     {
         private readonly ICustomerRepository _customerRepo;
 
-        private const int PAGE_SIZE = 10;
-
         public CustomerController(ICustomerRepository customerRepo)
         {
             _customerRepo = customerRepo;
@@ -26,7 +24,7 @@ namespace StoreApp.Web.Controllers
         public async Task<IEnumerable<CustomerData>> GetAllCustomers()
         {
             var customers = await _customerRepo.GetAllCustomers();
-            return customers.OrderBy(c => c.Id).Take(PAGE_SIZE).Select(c => new CustomerData(c));
+            return customers.OrderBy(c => c.Id).Select(c => new CustomerData(c));
         }
 
         [HttpGet("api/customers/search")]
@@ -36,7 +34,7 @@ namespace StoreApp.Web.Controllers
                 return await GetAllCustomers();
 
             var customers = await _customerRepo.SearchCustomersAsync(query);
-            return customers.OrderBy(c => c.Id).Take(PAGE_SIZE).Select(c => new CustomerData(c));
+            return customers.OrderBy(c => c.Id).Select(c => new CustomerData(c));
         }
 
         [HttpPost("api/customers/add")]
