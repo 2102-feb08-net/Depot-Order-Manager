@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,11 +12,14 @@ namespace StoreApp.Library.Model
         /// <summary>
         /// The first name of the customer.
         /// </summary>
+        [Required]
+        [StringLength(maximumLength: CustomerConstraints.MaxNameLength)]
         public string FirstName { get; init; }
 
         /// <summary>
         /// The last name of the customer.
         /// </summary>
+        [StringLength(maximumLength: CustomerConstraints.MaxNameLength)]
         public string LastName { get; init; }
 
         /// <summary>

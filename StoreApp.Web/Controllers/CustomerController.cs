@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using StoreApp.Library.Model;
 using StoreApp.DataAccess.Repository;
 using StoreApp.Web.Model;
+using System.ComponentModel.DataAnnotations;
 
 namespace StoreApp.Web.Controllers
 {
@@ -54,6 +55,6 @@ namespace StoreApp.Web.Controllers
         }
 
         [HttpPost("api/customers/add")]
-        public async Task AddCustomer(NewCustomer customer) => await _customerRepo.CreateCustomerAsync(customer);
+        public async Task AddCustomer([Required] NewCustomer customer) => await _customerRepo.CreateCustomerAsync(customer);
     }
 }
