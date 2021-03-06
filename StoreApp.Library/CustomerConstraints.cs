@@ -14,6 +14,6 @@ namespace StoreApp.Library
         /// <summary>
         /// The maximum length of both the first and last name seperately.
         /// </summary>
-        public const int MaxNameLength = 50;
+        public const int MAX_NAME_LENGTH = 50;
     }
 }

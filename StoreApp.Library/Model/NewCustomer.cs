@@ -13,13 +13,13 @@ namespace StoreApp.Library.Model
         /// The first name of the customer.
         /// </summary>
         [Required]
-        [StringLength(maximumLength: CustomerConstraints.MaxNameLength)]
+        [StringLength(maximumLength: CustomerConstraints.MAX_NAME_LENGTH)]
         public string FirstName { get; init; }
 
         /// <summary>
         /// The last name of the customer.
         /// </summary>
-        [StringLength(maximumLength: CustomerConstraints.MaxNameLength)]
+        [StringLength(maximumLength: CustomerConstraints.MAX_NAME_LENGTH)]
         public string LastName { get; init; }
 
         /// <summary>

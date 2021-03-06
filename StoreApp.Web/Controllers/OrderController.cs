@@ -49,13 +49,12 @@ namespace StoreApp.Web.Controllers
         {
             var order = await _orderRepo.GetOrderAsync(id);
             var head = ConvertOrderToOnlyHead(order);
-            var lines = ConvertOrderToOrderLines(order);
+            var lines = order.OrderLines;
 
             return new FullOrder()
             {
                 Head = head,
                 Lines = lines,
-                OrderTotalPrice = lines.Sum(l => l.LineTotalPrice)
             };
         }
 
@@ -91,21 +90,6 @@ namespace StoreApp.Web.Controllers
                 OrderTime = order.OrderTime.HasValue ? order.OrderTime.Value.DateTime.ToString("D") : "No Data",
                 TotalPrice = order.TotalPrice
             };
-        }
-
-        private static List<IOrderLine> ConvertOrderToOrderLines(IReadOnlyOrder order)
-        {
-            List<IOrderLine> lines = new List<IOrderLine>();
-            foreach (var line in order.ShoppingCartQuantity)
-            {
-                lines.Add(new OrderLine()
-                {
-                    Product = line.Key,
-                    Quantity = line.Value,
-                    LineTotalPrice = line.Key.UnitPrice * line.Value, //TODO: Refactor into business logic
-                });
-            }
-            return lines;
         }
     }
 }

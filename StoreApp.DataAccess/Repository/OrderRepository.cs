@@ -136,14 +136,14 @@ namespace StoreApp.DataAccess.Repository
                     id: purchase.StoreLocation.Id
                 );
 
-                Dictionary<IProduct, int> productQuantities = new Dictionary<IProduct, int>();
+                List<IOrderLine> orderlines = new List<IOrderLine>();
                 foreach (var line in purchase.OrderLines)
                 {
                     IProduct product = new Library.Model.Product(line.Product.Name, line.Product.Category, line.PurchaseUnitPrice, line.Product.Id);
-                    productQuantities.Add(product, line.Quantity);
+                    orderlines.Add(new Library.Model.OrderLine(product, line.Quantity));
                 }
 
-                var order = new ProcessedOrder(customer, location, productQuantities, purchase.DateProcessed, purchase.OrderTotalPrice, purchase.Id);
+                var order = new ProcessedOrder(customer, location, orderlines, purchase.DateProcessed, purchase.OrderTotalPrice, purchase.Id);
                 orders.Add(order);
             }
 

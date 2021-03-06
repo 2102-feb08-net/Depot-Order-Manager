@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using StoreApp.Library.Model;
 
 namespace StoreApp.Web.Model
 {
@@ -20,11 +21,5 @@ namespace StoreApp.Web.Model
         [Required]
         [MinLength(1)]
         public List<IOrderLine> Lines { get; init; }
-
-        /// <summary>
-        /// The total price of the order.
-        /// </summary>
-        [Required]
-        public decimal OrderTotalPrice { get; init; }
     }
 }

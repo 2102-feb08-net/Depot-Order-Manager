@@ -22,9 +22,9 @@ namespace StoreApp.Library.Model
         ILocation StoreLocation { get; }
 
         /// <summary>
-        /// The products in the order and their corresponding quantities.
+        /// The orderlines inside of the order.
         /// </summary>
-        IReadOnlyDictionary<IProduct, int> ShoppingCartQuantity { get; }
+        List<IOrderLine> OrderLines { get; }
 
         /// <summary>
         /// The time the order was proccessed.

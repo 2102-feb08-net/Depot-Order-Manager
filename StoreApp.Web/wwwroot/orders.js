@@ -67,7 +67,7 @@ function rebuildProductTable(order) {
     for (const line of order.lines)
         addOrderLineRow(productTable, line.product, line.quantity, line.lineTotalPrice);
 
-    updateTotalRow(productTable, order.orderTotalPrice);
+    updateTotalRow(productTable, order.head.totalPrice);
 }
 
 function clearOrderLines(table) {

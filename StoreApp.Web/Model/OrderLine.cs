@@ -1,4 +1,5 @@
-﻿using StoreApp.Library.Model;
+﻿using StoreApp.Library;
+using StoreApp.Library.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,7 +17,7 @@ namespace StoreApp.Web.Model
         public IProduct Product { get; set; }
 
         [Required]
-        [Range(Order.MIN_QUANTITY_PER_ORDER, Order.MAX_QUANTITY_PER_ORDER)]
+        [Range(OrderConstraints.MIN_QUANTITY_PER_ORDERLINE, OrderConstraints.MAX_QUANTITY_PER_ORDERLINE)]
         public int Quantity { get; set; }
 
         [Required]

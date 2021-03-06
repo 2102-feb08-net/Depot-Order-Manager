@@ -20,7 +20,7 @@ namespace StoreApp.Library.Model
         /// <summary>
         /// The quantity ordered of the product.
         /// </summary>
-        [Range(Order.MIN_QUANTITY_PER_ORDER, Order.MAX_QUANTITY_PER_ORDER)]
+        [Range(OrderConstraints.MIN_QUANTITY_PER_ORDERLINE, OrderConstraints.MAX_QUANTITY_PER_ORDERLINE)]
         public int Quantity { get; init; }
     }
 }

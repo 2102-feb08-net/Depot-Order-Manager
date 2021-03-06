@@ -2,9 +2,9 @@
 
 const table = document.getElementById("tableBody");
 
-function buildTable(table, locations) {
-    for (let i = table.rows.length - 1; i >= 0; i--)
-        table.deleteRow(0);
+function buildTable(tableToBuild, locations) {
+    for (let i = tableToBuild.rows.length - 1; i >= 0; i--)
+        tableToBuild.deleteRow(0);
 
     for (const location of locations) {
         addLocationRow(location.id, location.name, location.addressLines);
