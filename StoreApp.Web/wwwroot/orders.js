@@ -36,12 +36,7 @@ async function showOrderDetails(orderId) {
 
     let details = await response.json();
 
-    clearOrderLines(productTable);
-
-    for (const line of details.lines)
-        addOrderLineRow(productTable, line.product, line.quantity, line.lineTotalPrice);
-
-    updateTotalRow(productTable, details.orderTotalPrice);
+    rebuildProductTable(details);
 
     buildAddress(details.head.location.name, details.head.location.addressLines);
 
@@ -66,8 +61,17 @@ function setDetailsVisibility(visibility) {
     document.getElementById("orderDetailsContainer").hidden = !visibility;
 }
 
+function rebuildProductTable(order) {
+    clearOrderLines(productTable);
+
+    for (const line of order.lines)
+        addOrderLineRow(productTable, line.product, line.quantity, line.lineTotalPrice);
+
+    updateTotalRow(productTable, order.orderTotalPrice);
+}
+
 function clearOrderLines(table) {
-    let numberOfRowsToDelete = table.rows.length - 2;
+    let numberOfRowsToDelete = table.rows.length - 1;
 
     for (let i = 0; i < numberOfRowsToDelete; i++)
         table.deleteRow(0);

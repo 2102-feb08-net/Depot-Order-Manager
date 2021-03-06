@@ -49,8 +49,8 @@ function addToSelect(selectElementId, displayName, value) {
     document.getElementById(selectElementId).options.add(new Option(displayName, value));
 }
 
-function addProductRow(id, name, category, unitPrice, quantity) {
-    let row = table.insertRow(0);
+function addProductRow(index, id, name, category, unitPrice, quantity) {
+    let row = table.insertRow(index);
     let idCell = row.insertCell();
     let nameCell = row.insertCell();
     let categoryCell = row.insertCell();
@@ -68,13 +68,13 @@ function addProductRow(id, name, category, unitPrice, quantity) {
     totalPriceCell.innerHTML = "$" + (price * quantity);
 }
 
-function updateTotalRow(tableToUpdate) {
+function updateTotalRow(tableToUpdate, cart) {
     const lastRow = tableToUpdate.rows[tableToUpdate.rows.length - 1];
     const totalPriceCell = lastRow.cells[lastRow.cells.length - 1];
 
     let total = 0;
-    for (let product of productPriceViews)
-        total += product.totalPrice;
+    for (let product of cart)
+        total += product.quantity * product.unitPrice;
     totalPriceCell.innerHTML = "$" + truncateToDecimals(total);
 }
 
@@ -90,13 +90,10 @@ let quantityInput = document.getElementById("quantityInput");
 addProductButton.onclick = () => {
     let productSelect = document.getElementById("productSelect");
     let productObject = JSON.parse(productSelect.value);
-    let quantity = quantityInput.value;
+    let quantity = Number(quantityInput.value);
 
     if (productIsValid(productObject, quantity)) {
-        addProductRow(productObject.id, productObject.name, productObject.category, productObject.unitPrice, quantity);
-        productPriceViews.push(new ProductPriceView(productObject.id, quantity * truncateToDecimals(productObject.unitPrice)));
-        productCart.push(new Product(productObject.id, Number(quantity)));
-        updateTotalRow(table);
+        addOrReplaceProductInCart(productObject, quantity);
     }
     else {
         alert("Product and/or quantity is invalid. Failed to add to order.");
@@ -104,27 +101,65 @@ addProductButton.onclick = () => {
 };
 
 function productIsValid(product, quantity) {
-    return product.id > 0 && quantity > 0;
+    return product.id > 0 && quantity >= 0;
 }
 
-class ProductPriceView {
-    constructor(id, totalPrice) {
+function addOrReplaceProductInCart(product, quantity) {
+    let insertIndex = table.rows.length - 1;
+    let replacedProductInCart = false;
+    for (let i = productCart.length - 1; i >= 0; i--) {
+        if (productCart[i].id == product.id) {
+            if (quantity === 0) {
+                productCart.splice(i, 1);
+            }
+            else {
+                productCart[i].quantity = quantity;
+                replacedProductInCart = true;
+            }
+            table.deleteRow(i);
+            insertIndex = i;
+            break;
+        }
+    }
+
+    if (quantity !== 0) {
+        addProductRow(insertIndex, product.id, product.name, product.category, product.unitPrice, quantity);
+        if (!replacedProductInCart)
+            productCart.push(new CartProduct(product.id, quantity, product.unitPrice));
+    }
+    updateTotalRow(table, productCart);
+}
+
+class CartProduct {
+    constructor(id, quantity, unitPrice) {
         this.id = id;
-        this.totalPrice = totalPrice;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
     }
 }
 
-class Product {
+class OrderLine {
     constructor(productId, quantity) {
         this.productId = productId;
         this.quantity = quantity;
     }
 }
 
+function convertCartIntoOrderLines(products) {
+    let orderLines = [];
+
+    for (let product of productCart) {
+        orderLines.push(new OrderLine(product.id, product.quantity));
+    }
+    return orderLines;
+}
+
 async function submitOrder(event) {
     event.preventDefault();
 
-    if (productCart.length === 0) {
+    let orderLines = convertCartIntoOrderLines(productCart);
+
+    if (orderLines.length === 0) {
         alert("You need at least one product in the cart to submit an order.");
         return;
     }
@@ -132,7 +167,7 @@ async function submitOrder(event) {
     const order = {
         customerId: document.getElementById("customerSelect").value,
         storeLocationId: document.getElementById("locationSelect").value,
-        orderLines: productCart,
+        orderLines: orderLines,
     }
 
     const options = {
@@ -147,7 +182,7 @@ async function submitOrder(event) {
     let response = await fetch("/api/orders/send-order", options);
 
     if (!response.ok) {
-        alert("Failed to submit order");
+        alert("Failed to submit order!");
         return
     }
 
