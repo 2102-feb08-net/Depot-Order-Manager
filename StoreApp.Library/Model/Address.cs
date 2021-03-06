@@ -62,26 +62,33 @@ namespace StoreApp.Library.Model
 
         public Address(string address1, string address2, string city, string state, string country, int zipCode)
         {
+            if (address1 is null)
+                throw new ArgumentNullException(nameof(address1));
             if (string.IsNullOrWhiteSpace(address1))
-                throw new System.ArgumentNullException(nameof(address1));
+                throw new ArgumentException(message: "Address 1 cannot be empty.", nameof(address1));
 
             // Address 2 is optional
 
-            if (string.IsNullOrWhiteSpace(city))
+            if (city is null)
                 throw new ArgumentNullException(nameof(city));
-            if (string.IsNullOrWhiteSpace(state))
+            if (string.IsNullOrWhiteSpace(city))
+                throw new ArgumentException(message: "City cannot be empty.", nameof(city));
+
+            if (state is null)
                 throw new ArgumentNullException(nameof(state));
+            if (string.IsNullOrWhiteSpace(state))
+                throw new ArgumentException(message: "State cannot be empty.", nameof(state));
 
             // Country isn't required in the United States
 
             if (zipCode == default)
-                throw new ArgumentNullException(paramName: nameof(zipCode), message: $"Zip Code cannot be {default(int)}.");
+                throw new ArgumentException(message: $"Zip Code cannot be {default(int)}.", paramName: nameof(zipCode));
 
-            Address1 = address1;
-            Address2 = address2;
-            City = city;
-            State = state;
-            Country = country;
+            Address1 = address1.Trim();
+            Address2 = address2?.Trim();
+            City = city.Trim();
+            State = state.Trim();
+            Country = country?.Trim();
             ZipCode = zipCode;
         }
     }

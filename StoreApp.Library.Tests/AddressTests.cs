@@ -52,7 +52,7 @@ namespace StoreApp.Library.Tests
             // arrange
 
             // act
-            static Address address() => new Address(string.Empty, "Apt 2", "Newcity", "Newzona", "Country", 12345);
+            static Address address() => new Address("   ", "Apt 2", "Newcity", "Newzona", "Country", 12345);
 
             // assert
             Assert.Throws<ArgumentException>(address);
@@ -64,7 +64,7 @@ namespace StoreApp.Library.Tests
             // arrange
 
             // act
-            static Address address() => new Address("123 Address", "Apt 2", string.Empty, "Newzona", "Country", 12345);
+            static Address address() => new Address("123 Address", "Apt 2", "   ", "Newzona", "Country", 12345);
 
             // assert
             Assert.Throws<ArgumentException>(address);
@@ -76,10 +76,46 @@ namespace StoreApp.Library.Tests
             // arrange
 
             // act
-            static Address address() => new Address("123 Address", "Apt 2", "Newcity", string.Empty, "Country", 12345);
+            static Address address() => new Address("123 Address", "Apt 2", "Newcity", "   ", "Country", 12345);
 
             // assert
             Assert.Throws<ArgumentException>(address);
+        }
+
+        [Fact]
+        public void Address_ConstructNullStreet1_Fail()
+        {
+            // arrange
+
+            // act
+            static Address address() => new Address(null, "Apt 2", "Newcity", "Newzona", "Country", 12345);
+
+            // assert
+            Assert.Throws<ArgumentNullException>(address);
+        }
+
+        [Fact]
+        public void Address_ConstructNullCity_Fail()
+        {
+            // arrange
+
+            // act
+            static Address address() => new Address("123 Address", "Apt 2", null, "Newzona", "Country", 12345);
+
+            // assert
+            Assert.Throws<ArgumentNullException>(address);
+        }
+
+        [Fact]
+        public void Address_ConstructNullState_Fail()
+        {
+            // arrange
+
+            // act
+            static Address address() => new Address("123 Address", "Apt 2", "Newcity", null, "Country", 12345);
+
+            // assert
+            Assert.Throws<ArgumentNullException>(address);
         }
 
         [Fact]
