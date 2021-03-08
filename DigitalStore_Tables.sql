@@ -110,7 +110,10 @@ GO
 INSERT INTO Product (Name, Category, UnitPrice) VALUES
 	('Apple', 'Food', 1.29),
 	('Banana', 'Food', 0.79),
-	('Orange', 'Food', 1.49)
+	('Orange', 'Food', 1.49),
+	('Computer', 'Electronics', 500),
+	('Keyboard', 'Electronics', 15),
+	('Mouse', 'Electronics', 10)
 
 
 INSERT INTO Address (Address1, Address2, City, State, Country, ZipCode) VALUES
@@ -124,11 +127,17 @@ INSERT INTO StoreLocation (Name, AddressId) VALUES
 	('Warehouse_West1', (SELECT Id FROM Address WHERE Address1 = '1478 Hamill Avenue'))
 
 INSERT INTO Inventory (StoreId, ProductId, Quantity) VALUES
-	(dbo.GetStoreLocationId('HQ'), dbo.GetProductId('Apple'), 54),
+	(dbo.GetStoreLocationId('HQ'), dbo.GetProductId('Apple'), 554),
 	(dbo.GetStoreLocationId('HQ'), dbo.GetProductId('Banana'), 92),
 	(dbo.GetStoreLocationId('HQ'), dbo.GetProductId('Orange'), 122),
 	(dbo.GetStoreLocationId('Warehouse_West1'), dbo.GetProductId('Banana'), 63),
-	(dbo.GetStoreLocationId('Warehouse_East1'), dbo.GetProductId('Orange'), 152)
+	(dbo.GetStoreLocationId('Warehouse_East1'), dbo.GetProductId('Orange'), 152),
+	(dbo.GetStoreLocationId('Warehouse_West1'), dbo.GetProductId('Computer'),54),
+	(dbo.GetStoreLocationId('Warehouse_East1'), dbo.GetProductId('Computer'), 242),
+	(dbo.GetStoreLocationId('Warehouse_West1'), dbo.GetProductId('Keyboard'),452),
+	(dbo.GetStoreLocationId('Warehouse_East1'), dbo.GetProductId('Keyboard'), 532),
+	(dbo.GetStoreLocationId('Warehouse_West1'), dbo.GetProductId('Mouse'),155),
+	(dbo.GetStoreLocationId('Warehouse_East1'), dbo.GetProductId('Mouse'), 532)
 
 SELECT * FROM Product
 
