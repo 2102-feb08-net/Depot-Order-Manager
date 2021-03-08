@@ -33,10 +33,10 @@ namespace StoreApp.Web.Controllers
         /// </summary>
         /// <returns>Returns an enumerable with gener</returns>
         [HttpGet("/api/orders/getall")]
-        public async Task<IEnumerable<OrderHead>> GetOrders()
+        public async Task<IActionResult> GetOrders()
         {
             var orders = await _orderRepo.GetAllProcessedOrdersAsync();
-            return orders.Select(o => ConvertOrderToOnlyHead(o));
+            return Ok(orders.Select(o => ConvertOrderToOnlyHead(o)));
         }
 
         /// <summary>
@@ -45,17 +45,17 @@ namespace StoreApp.Web.Controllers
         /// <param name="id">The Id of the order.</param>
         /// <returns>Returns all of the information on the order.</returns>
         [HttpGet("/api/orders/{id}")]
-        public async Task<FullOrder> GetOrderDetails(int id)
+        public async Task<IActionResult> GetOrderDetails(int id)
         {
             var order = await _orderRepo.GetOrderAsync(id);
             var head = ConvertOrderToOnlyHead(order);
             var lines = order.OrderLines;
 
-            return new FullOrder()
+            return Ok(new FullOrder()
             {
                 Head = head,
                 Lines = lines,
-            };
+            });
         }
 
         /// <summary>
@@ -65,11 +65,11 @@ namespace StoreApp.Web.Controllers
         /// <param name="location">The location Id to search for.</param>
         /// <returns>Returns the orders found. If no parameters, then all orders are returned.</returns>
         [HttpGet("/api/orders/search")]
-        public async Task<IEnumerable<OrderHead>> SearchOrders(int? customer, int? location)
+        public async Task<IActionResult> SearchOrders(int? customer, int? location)
         {
             ISearchParams searchParams = new SearchParams() { CustomerId = customer, LocationId = location };
             var orders = await _orderRepo.SearchOrdersAsync(searchParams);
-            return orders.Select(o => ConvertOrderToOnlyHead(o));
+            return Ok(orders.Select(o => ConvertOrderToOnlyHead(o)));
         }
 
         /// <summary>

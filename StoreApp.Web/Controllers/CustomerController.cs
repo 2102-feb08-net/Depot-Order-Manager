@@ -33,10 +33,11 @@ namespace StoreApp.Web.Controllers
         /// </summary>
         /// <returns>Returns an enumerable of all of the customers in the database.</returns>
         [HttpGet("api/customers/getall")]
-        public async Task<IEnumerable<CustomerData>> GetAllCustomers()
+        public async Task<IActionResult> GetAllCustomers()
         {
             var customers = await _customerRepo.GetAllCustomers();
-            return customers.OrderBy(c => c.Id).Select(c => new CustomerData(c));
+            var sortedCustomers = customers.OrderBy(c => c.Id).Select(c => new CustomerData(c));
+            return Ok(sortedCustomers);
         }
 
         /// <summary>
@@ -45,13 +46,14 @@ namespace StoreApp.Web.Controllers
         /// <param name="query">Name search query</param>
         /// <returns>Returns an enumerable of all of the customers with the query in their name.</returns>
         [HttpGet("api/customers/search")]
-        public async Task<IEnumerable<CustomerData>> SearchCustomers(string query)
+        public async Task<IActionResult> SearchCustomers(string query)
         {
             if (string.IsNullOrWhiteSpace(query))
-                return await GetAllCustomers();
+                return Ok(await GetAllCustomers());
 
             var customers = await _customerRepo.SearchCustomersAsync(query);
-            return customers.OrderBy(c => c.Id).Select(c => new CustomerData(c));
+            var sortedCustomers = customers.OrderBy(c => c.Id).Select(c => new CustomerData(c));
+            return Ok(sortedCustomers);
         }
 
         [HttpPost("api/customers/add")]

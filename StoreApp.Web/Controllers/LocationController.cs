@@ -32,15 +32,16 @@ namespace StoreApp.Web.Controllers
         /// </summary>
         /// <returns>Returns an enumerable of all of the locations.</returns>
         [HttpGet("api/locations/getall")]
-        public async Task<IEnumerable<LocationHead>> GetAllLocations()
+        public async Task<IActionResult> GetAllLocations()
         {
             var locations = await _locationRepo.GetLocationsAsync();
-            return locations.OrderBy(l => l.Id).Select(l => new LocationHead()
+            var sortedLocations = locations.OrderBy(l => l.Id).Select(l => new LocationHead()
             {
                 Id = l.Id,
                 Name = l.Name,
                 AddressLines = l.Address.FormatToMultiline()
             });
+            return Ok(sortedLocations);
         }
 
         /// <summary>
@@ -49,18 +50,20 @@ namespace StoreApp.Web.Controllers
         /// <param name="query">Name search query</param>
         /// <returns>Returns an enumerable of all of the locations with the query in their name. An empty query returns all locations.</returns>
         [HttpGet("api/locations/search")]
-        public async Task<IEnumerable<LocationHead>> SearchLocations(string query)
+        public async Task<IActionResult> SearchLocations(string query)
         {
             if (string.IsNullOrWhiteSpace(query))
-                return await GetAllLocations();
+                return Ok(await GetAllLocations());
 
             var locations = await _locationRepo.SearchLocationsAsync(query);
-            return locations.OrderBy(l => l.Id).Select(l => new LocationHead()
+            var sortedLocations = locations.OrderBy(l => l.Id).Select(l => new LocationHead()
             {
                 Id = l.Id,
                 Name = l.Name,
                 AddressLines = l.Address.FormatToMultiline()
             });
+
+            return Ok(sortedLocations);
         }
     }
 }
