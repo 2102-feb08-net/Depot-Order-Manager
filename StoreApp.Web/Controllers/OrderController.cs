@@ -36,7 +36,12 @@ namespace StoreApp.Web.Controllers
         public async Task<IActionResult> GetOrders()
         {
             var orders = await _orderRepo.GetAllProcessedOrdersAsync();
-            return Ok(orders.Select(o => ConvertOrderToOnlyHead(o)));
+            var convertedOrders = orders.Select(o => ConvertOrderToOnlyHead(o)).ToList();
+
+            if (convertedOrders.Count == 0)
+                return NoContent();
+
+            return Ok(convertedOrders);
         }
 
         /// <summary>
@@ -47,15 +52,22 @@ namespace StoreApp.Web.Controllers
         [HttpGet("/api/orders/{id}")]
         public async Task<IActionResult> GetOrderDetails(int id)
         {
-            var order = await _orderRepo.GetOrderAsync(id);
-            var head = ConvertOrderToOnlyHead(order);
-            var lines = order.OrderLines;
-
-            return Ok(new FullOrder()
+            try
             {
-                Head = head,
-                Lines = lines,
-            });
+                var order = await _orderRepo.GetOrderAsync(id);
+                var head = ConvertOrderToOnlyHead(order);
+                var lines = order.OrderLines;
+
+                return Ok(new FullOrder()
+                {
+                    Head = head,
+                    Lines = lines,
+                });
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
         }
 
         /// <summary>
@@ -69,7 +81,12 @@ namespace StoreApp.Web.Controllers
         {
             ISearchParams searchParams = new SearchParams() { CustomerId = customer, LocationId = location };
             var orders = await _orderRepo.SearchOrdersAsync(searchParams);
-            return Ok(orders.Select(o => ConvertOrderToOnlyHead(o)));
+            var convertedOrders = orders.Select(o => ConvertOrderToOnlyHead(o)).ToList();
+
+            if (convertedOrders.Count == 0)
+                return NoContent();
+
+            return Ok(convertedOrders);
         }
 
         /// <summary>
@@ -77,7 +94,18 @@ namespace StoreApp.Web.Controllers
         /// </summary>
         /// <param name="orderTemplate">The order template to send to the server/</param>
         [HttpPost("/api/orders/send-order")]
-        public async Task SendOrder([Required] OrderTemplate orderTemplate) => await _orderRepo.SendOrderTransactionAsync(orderTemplate);
+        public async Task<IActionResult> SendOrder([Required] OrderTemplate orderTemplate)
+        {
+            try
+            {
+                await _orderRepo.SendOrderTransactionAsync(orderTemplate);
+                return Ok();
+            }
+            catch (OrderException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
         private static OrderHead ConvertOrderToOnlyHead(IReadOnlyOrder order)
         {

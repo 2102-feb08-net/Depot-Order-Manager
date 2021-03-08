@@ -46,6 +46,11 @@ namespace StoreApp.Library
         /// <returns>Returns the order with its information.</returns>
         Task<IReadOnlyOrder> GetOrderAsync(int orderId);
 
+        /// <summary>
+        /// Searches the database for oders that meet the specified search params.
+        /// </summary>
+        /// <param name="searchParams">The search params to filter orders by.</param>
+        /// <returns>Returns an enumerable of orders with the search params.</returns>
         Task<IEnumerable<IReadOnlyOrder>> SearchOrdersAsync(ISearchParams searchParams);
     }
 }

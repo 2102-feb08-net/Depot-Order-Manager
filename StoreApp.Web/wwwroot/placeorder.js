@@ -1,5 +1,8 @@
 'use strict';
 
+const MIN_QUANTITY = 0;
+const MAX_QUANTITY = 99;
+
 const table = document.getElementById("productTableBody");
 const orderForm = document.getElementById("orderForm");
 
@@ -182,7 +185,7 @@ async function submitOrder(event) {
     let response = await fetch("/api/orders/send-order", options);
 
     if (!response.ok) {
-        alert("Failed to submit order!");
+        alert(`Failed to submit order!`);
         return
     }
 
@@ -192,3 +195,9 @@ async function submitOrder(event) {
 }
 
 orderForm.addEventListener('submit', submitOrder);
+
+document.getElementById('quantityInput').onchange = () => {
+    let value = Number(quantityInput.value);
+    let clampedValue = Math.max(MIN_QUANTITY, Math.min(value, MAX_QUANTITY));
+    document.getElementById('quantityInput').value = clampedValue;
+};

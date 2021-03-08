@@ -64,13 +64,10 @@ namespace StoreApp.DataAccess.Repository
 
                 var inventory = inventories.FirstOrDefault(i => i.ProductId == orderLine.ProductId);
 
-                if (inventory is null)
-                    throw new OrderException($"Store location does not contain the product ID '{orderLine.ProductId}' in its inventory.");
-
-                if (inventory.Quantity >= orderLine.Quantity)
+                if (inventory is not null && inventory.Quantity >= orderLine.Quantity)
                     inventory.Quantity -= orderLine.Quantity;
                 else
-                    throw new OrderException($"The store location only has {inventory.Quantity} of '{inventory.Product.Name}' in stock, but the order is requesting to order {orderLine.Quantity} of the product.");
+                    throw new OrderException($"The specified store location does not have {orderLine.Quantity} of '{inventory.Product.Name}' in stock.");
 
                 purchaseOrder.OrderLines.Add(new OrderLine()
                 {
@@ -179,9 +176,14 @@ namespace StoreApp.DataAccess.Repository
                  .Include(p => p.StoreLocation)
                  .ThenInclude(s => s.Address)
                  .Where(o => o.Id == orderId).ToListAsync();
-            return ConvertPurchaseOrderToIOrders(orders).FirstOrDefault();
+            return ConvertPurchaseOrderToIOrders(orders).First();
         }
 
+        /// <summary>
+        /// Searches the database for oders that meet the specified search params.
+        /// </summary>
+        /// <param name="searchParams">The search params to filter orders by.</param>
+        /// <returns>Returns an enumerable of orders with the search params.</returns>
         public async Task<IEnumerable<IReadOnlyOrder>> SearchOrdersAsync(ISearchParams searchParams)
         {
             IQueryable<PurchaseOrder> orders = _context.PurchaseOrders
