@@ -12,7 +12,7 @@ namespace StoreApp.Web.Model
         /// <summary>
         /// The customer who made the order.
         /// </summary>
-        /// <remarks>Uses int fo customer Id instead of ICustomer because there is some issues with serializing inherited interfaces</remarks>
+        /// <remarks>Uses int for customer Id instead of ICustomer because there is some issues with serializing inherited interfaces</remarks>
         [Required]
         [Range(1, int.MaxValue)]
         public int CustomerId { get; init; }
