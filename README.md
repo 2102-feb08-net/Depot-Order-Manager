@@ -2,7 +2,7 @@
 
 ## Project Description
 
-This is an online webservice to allow product managers to easily create and manage orders. Through an easy to use web interface, the application enables said managers to place orders with support for multiple type of products at once, create new customers, and filter customers, locations and orders by various parameters. Most impoartantly though, all of the data is hosted and managed through an external SQL database, ensuring that the data is secure and reliable.
+Depot Order Manager is an online web application to allow product managers to easily create and manage orders. Through an easy to use web interface, the application enables said managers to place orders with support for multiple type of products at once, create new customers, and filter customers, locations and orders by various parameters. Most impoartantly though, all of the data is hosted and managed through an external SQL database, ensuring that the data is secure and reliable.
 
 ## Technologies Used
 
