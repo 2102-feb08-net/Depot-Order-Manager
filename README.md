@@ -61,9 +61,9 @@ To-do list:
   - Enter the quantity of the product you wish to order
   - Press the Add Product button to the the product to your cart
   - Keep adding products until satisfied with your order
-  > Tip: Add a quantity of 0 to remove the product from the cart
   - Press the Submit button to submit your order
-  - 
+  > Tip: Add a quantity of 0 to remove the product from the cart
+  
 ## License
 
 This project uses the following license: [MIT License](https://mit-license.org/).
