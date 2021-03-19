@@ -1,4 +1,4 @@
-# Store Order Manager
+# Depot Order Manager
 
 ## Project Description
 
