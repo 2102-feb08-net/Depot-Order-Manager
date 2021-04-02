@@ -26,7 +26,7 @@ To-do list:
 
 > The program must use SQL server, other SQL variations may not work.
 
-- Run the command `git clone https://github.com/2102-feb08-net/bryson-project1` to clone the repository.
+- Run the command `git clone https://github.com/2102-feb08-net/Depot-Order-Manager` to clone the repository.
 - Create a new SQL database in Azure
 - In database settings, set the firewall settings to "Allow Azure services and resources to access this server"
 - Create a new AppService in Azure
